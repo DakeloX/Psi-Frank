@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "H_Clinicas",
+    "slug": "H_Clinicas",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "H_Clinicas"
+}
