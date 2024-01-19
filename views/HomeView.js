@@ -21,9 +21,6 @@ const HomeView = () => {
   };
 
   const handleSearch = (term) => {
-    // Lógica para buscar al paciente con el término ingresado
-    // Puedes llamar a una función que realice la búsqueda en tu base de datos o en tu lista de pacientes, por ejemplo
-    // Supongamos que la búsqueda devuelve un paciente
     const foundPatient = {
       name: 'Paciente Encontrado',
       cc: '123456789',
@@ -35,54 +32,62 @@ const HomeView = () => {
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
+    <View style={styles.container}>
       <Header logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
-      <SearchBar onTermSubmit={handleSearch} />
-      {searchedPatient && (
-        <View>
-          <Text style={styles.title}>Resultados de la búsqueda</Text>
-          <PatientCard
-            name={searchedPatient.name}
-            cc={searchedPatient.cc}
-            entryDate={searchedPatient.entryDate}
-            lastUpdate={searchedPatient.lastUpdate}
-          />
-        </View>
-      )}
-      <NewPatient onPress={handleNewPatientPress} />
-      <Text style={styles.title}>Consultas Recientes</Text>
-      <PatientCard
-        name="Gabriel Medina Montenegro"
-        cc="0000000000"
-        entryDate="04-01-2024"
-        lastUpdate="30-02-2024"
-      />
-      <PatientCard
-        name="Diana Gutierrez Molina"
-        cc="1111111111"
-        entryDate="10-05-2023"
-        lastUpdate="24-02-2024"
-      />
-      <TouchableOpacity onPress={handleViewAllPress}>
-        <Text style={styles.viewAllText}>Ver Todos</Text>
-      </TouchableOpacity>
+      <ScrollView contentContainerStyle={styles.formContainer}>
+        <SearchBar onTermSubmit={handleSearch} />
+        {searchedPatient && (
+          <View>
+            <Text style={styles.title}>Resultados de la búsqueda</Text>
+            <PatientCard
+              name={searchedPatient.name}
+              cc={searchedPatient.cc}
+              entryDate={searchedPatient.entryDate}
+              lastUpdate={searchedPatient.lastUpdate}
+            />
+          </View>
+        )}
+        <NewPatient onPress={handleNewPatientPress} />
+        <Text style={styles.title}>Consultas Recientes</Text>
+        <PatientCard
+          name="Gabriel Medina Montenegro"
+          cc="0000000000"
+          entryDate="04-01-2024"
+          lastUpdate="30-02-2024"
+        />
+        <PatientCard
+          name="Diana Gutierrez Molina"
+          cc="1111111111"
+          entryDate="10-05-2023"
+          lastUpdate="24-02-2024"
+        />
+        <TouchableOpacity onPress={handleViewAllPress}>
+          <Text style={styles.viewAllText}>Ver Todos</Text>
+        </TouchableOpacity>
+      </ScrollView>
       <Footer />
-    </ScrollView>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
+    flex: 1,
     backgroundColor: '#181C42',
     alignItems: 'center',
     justifyContent: 'flex-start',
-    padding: 16,
+  },
+
+  formContainer: {
+    width: '100%',
+    paddingHorizontal: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   title: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: 'bold',
     marginTop: 16,
   },
@@ -91,7 +96,8 @@ const styles = StyleSheet.create({
     color: 'white',
     textDecorationLine: 'underline',
     marginTop: 16,
-    marginBottom: 46,
+    marginBottom: 64,
+    alignSelf: 'center',
     fontSize: 16,
   },
 });

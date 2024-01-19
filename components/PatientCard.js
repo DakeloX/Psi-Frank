@@ -14,7 +14,7 @@ export default function PatientCard({ name, cc, entryDate, lastUpdate }) {
 
 const styles = StyleSheet.create({
   container: {
-    width: 400,
+    width: 388,
     minHeight: 120, // Ajuste la altura para permitir más espacio
     backgroundColor: 'white',
     borderRadius: 10,

@@ -13,7 +13,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
         placeholder="Buscar Paciente"
         value={term}
         onChangeText={onTermChange}
-        onEndEditing={onTermSubmit}
+        onSubmitEditing={onTermSubmit}
       />
     </View>
   );
@@ -21,7 +21,7 @@ const SearchBar = ({ term, onTermChange, onTermSubmit }) => {
 
 const styles = StyleSheet.create({
   backgroundStyle: {
-    marginTop: 26,
+    marginTop: 20,
     backgroundColor: '#F0EEEE',
     height: 50,
     borderRadius: 5,

@@ -40,6 +40,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     paddingHorizontal: 10,
+    width: '100%',
   },
   leftContainer: {
     padding: 10,
