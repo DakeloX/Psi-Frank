@@ -3,7 +3,7 @@ import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-nati
 import { useNavigation } from '@react-navigation/native';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
-import NewPatient from '../components/NewPatient';
+import NewPatient from '../components/BtnNewPatient';
 import PatientCard from '../components/PatientCard';
 import Footer from '../components/Footer';
 
@@ -37,7 +37,7 @@ const HomeView = () => {
       <ScrollView contentContainerStyle={styles.formContainer}>
         <SearchBar onTermSubmit={handleSearch} />
         {searchedPatient && (
-          <View>
+          <View style={styles.container}>
             <Text style={styles.title}>Resultados de la búsqueda</Text>
             <PatientCard
               name={searchedPatient.name}
@@ -74,8 +74,9 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#181C42',
-    alignItems: 'center',
+    alignSelf: 'center',
     justifyContent: 'flex-start',
+    width: '100%',
   },
 
   formContainer: {

@@ -1,75 +1,84 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import RNPickerSelect from 'react-native-picker-select';
 
 const FormView = () => {
   const [date, setDate] = useState(new Date());
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [gender, setGender] = useState(null);
 
   const handleDateChange = (event, selectedDate) => {
     const currentDate = selectedDate || date;
     setShowDatePicker(false);
     setDate(currentDate);
   };
-  
+
   return (
     <View style={styles.container}>
       <Header logo={require('../images/Logo_Lobo.png')} title="Pacientes" />
 
-      <ScrollView style={styles.formContainer}>
+      <ScrollView contentContainerStyle={styles.formContainer}>
+        {/* Información Personal */}
+        <View style={styles.formSection}>
+          <Text style={styles.sectionTitle}>Información Personal</Text>
+          <Text style={styles.label}>Nombre:</Text>
+          <TextInput style={styles.input} placeholder="Ingrese el nombre" />
 
-        <Text style={styles.label}>Nombre:</Text>
-        <TextInput style={styles.input} placeholder="Ingrese el nombre" />
+          <Text style={styles.label}>Fecha de Nacimiento:</Text>
+          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
+            <Text style={styles.dateInput}>{date.toDateString()}</Text>
+          </TouchableOpacity>
+          {showDatePicker && (
+            <DateTimePicker
+              value={date}
+              mode="date"
+              display="default"
+              onChange={handleDateChange}
+            />
+          )}
 
-        <Text style={styles.label}>Fecha:</Text>
-        <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-          <Text style={styles.dateInput}>{date.toDateString()}</Text>
-        </TouchableOpacity>
-        {showDatePicker && (
-          <DateTimePicker
-            value={date}
-            mode="date"
-            display="default"
-            onChange={handleDateChange}
-          />
-        )}
+          <Text style={styles.label}>CC:</Text>
+          <TextInput style={styles.input} placeholder="Ingresa la cédula" keyboardType="numeric" />
+
+          <Text style={styles.label}>Edad:</Text>
+          <TextInput style={styles.input} placeholder="Ingresa la edad" keyboardType="numeric" />
+
+          <Text style={styles.label}>Estado Civil:</Text>
+          <TextInput style={styles.input} placeholder="Ingresa el estado civil" />
+          <Text style={styles.label}>Sexo:</Text>
+
+          <View style={styles.pickerContainer}>
         
-        <Text style={styles.label}>CC:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa la cédula" keyboardType="numeric" />
+            <RNPickerSelect
+              placeholder={{ label: 'Selecciona el sexo', value: null }}
+              onValueChange={(value) => setGender(value)}
+              items={[
+                { label: 'Femenino', value: 'Femenino' },
+                { label: 'Masculino', value: 'Masculino' },
+                { label: 'No Binario', value: 'No Binario' },
+                { label: 'Otro', value: 'Otro' },
+              ]}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+            />
+          </View>
+        </View>
 
-        <Text style={styles.label}>Edad:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa la edad" keyboardType="numeric" />
+        {/* Información de Contacto */}
+        <View style={styles.formSection}>
+          <Text style={styles.sectionTitle}>Información de Contacto</Text>
+          <Text style={styles.label}>Tel:</Text>
+          <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
+          {/* Otros campos de información de contacto */}
+        </View>
 
-        <Text style={styles.label}>Estado Civil:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa el estado civil" />
-
-        <Text style={styles.label}>Sexo:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa el sexo" />
-
-        <Text style={styles.label}>Ocupación:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa la ocupación" />
-
-        <Text style={styles.label}>Escolaridad:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa la escolaridad" />
-
-        <Text style={styles.label}>Religión:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa la religión" />
-
-        <Text style={styles.label}>Tel:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
-
-        <Text style={styles.label}>Con quien vive:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa con quién vive" />
-
-        <Text style={styles.label}>Acompañante:</Text>
-        <TextInput style={styles.input} placeholder="Ingresa el acompañante" />
-
+        {/* Botón de Guardar */}
         <TouchableOpacity style={styles.submitButton}>
-        <Text style={styles.submitButtonText}>Guardar</Text>
+          <Text style={styles.submitButtonText}>Guardar</Text>
         </TouchableOpacity>
-
       </ScrollView>
 
       <Footer />
@@ -82,11 +91,26 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#181C42',
     alignItems: 'center',
-    justifyContent: 'flex-start',
+    alignSelf: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
   formContainer: {
-    width: 420,
-    paddingHorizontal: 32,
+    width: '100%',
+    paddingHorizontal: 22,
+    alignItems: 'center',
+    justifyContent: 'center',
+
+  },
+  formSection: {
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    color: '#fff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    marginTop: 16,
   },
   label: {
     color: '#fff',
@@ -100,7 +124,9 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-  },  
+    minWidth: 350,
+    maxWidth: 500,
+  },
   dateInput: {
     backgroundColor: '#fff',
     padding: 8,
@@ -109,10 +135,23 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     height: 40,
     borderRadius: 8,
+    minWidth: 350,
+    maxWidth: 500,
+  },
+  pickerContainer: {
+    backgroundColor: '#fff',
+    height: 40,
+    borderRadius: 8,
+    marginTop: 8,
+    marginBottom: -10,
+    paddingHorizontal: 16,
+    paddingTop: 5,
+    maxWidth: 500,
+    minWidth: 350,
   },
   submitButton: {
     backgroundColor: '#3498DB',
-    padding: 12,
+    padding: 16,
     borderRadius: 8,
     alignItems: 'center',
     marginTop: 20,
@@ -120,10 +159,18 @@ const styles = StyleSheet.create({
   },
   submitButtonText: {
     color: 'white',
-    fontSize: 16,
+    fontSize: 18,
     fontWeight: 'bold',
   },
-  // Agrega más estilos según sea necesario
+});
+
+const pickerSelectStyles = StyleSheet.create({
+  inputIOS: {
+    color: 'black', // Color del texto
+  },
+  inputAndroid: {
+    color: 'black', // Color del texto
+  },
 });
 
 export default FormView;
