@@ -1,19 +1,52 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import RNPickerSelect from 'react-native-picker-select';
 
 const FormView = () => {
   const [date, setDate] = useState(new Date());
-  const [showDatePicker, setShowDatePicker] = useState(false);
   const [gender, setGender] = useState(null);
+  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
-  const handleDateChange = (event, selectedDate) => {
-    const currentDate = selectedDate || date;
-    setShowDatePicker(false);
-    setDate(currentDate);
+  const showDatePicker = () => {
+    setDatePickerVisible(true);
+  };
+
+  const hideDatePicker = () => {
+    setDatePickerVisible(false);
+  };
+
+  const handleDateConfirm = (selectedDate) => {
+    hideDatePicker();
+    setDate(selectedDate);
+  };
+  
+  const renderDatePicker = () => {
+    if (Platform.OS === 'web') {
+      return (
+        <input
+          type="date"
+          value={date.toISOString().split('T')[0]}
+          onChange={(e) => setDate(new Date(e.target.value))}
+        />
+      );
+    } else {
+      return (
+        <>
+          <TouchableOpacity onPress={showDatePicker}>
+            <Text style={styles.dateInput}>{date.toDateString()}</Text>
+          </TouchableOpacity>
+          <DateTimePickerModal
+            isVisible={isDatePickerVisible}
+            mode="date"
+            onConfirm={handleDateConfirm}
+            onCancel={hideDatePicker}
+          />
+        </>
+      );
+    }
   };
 
   return (
@@ -27,18 +60,8 @@ const FormView = () => {
           <Text style={styles.label}>Nombre:</Text>
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
 
-          <Text style={styles.label}>Fecha de Nacimiento:</Text>
-          <TouchableOpacity onPress={() => setShowDatePicker(true)}>
-            <Text style={styles.dateInput}>{date.toDateString()}</Text>
-          </TouchableOpacity>
-          {showDatePicker && (
-            <DateTimePicker
-              value={date}
-              mode="date"
-              display="default"
-              onChange={handleDateChange}
-            />
-          )}
+          <Text style={styles.label}>Fecha:</Text>
+          {renderDatePicker()}
 
           <Text style={styles.label}>CC:</Text>
           <TextInput style={styles.input} placeholder="Ingresa la cédula" keyboardType="numeric" />
@@ -70,7 +93,7 @@ const FormView = () => {
         {/* Información de Contacto */}
         <View style={styles.formSection}>
           <Text style={styles.sectionTitle}>Información de Contacto</Text>
-          <Text style={styles.label}>Tel:</Text>
+          <Text style={styles.label}>Teléfono:</Text>
           <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
           {/* Otros campos de información de contacto */}
         </View>
@@ -154,7 +177,6 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginTop: 20,
     marginBottom: 64,
   },
   submitButtonText: {
