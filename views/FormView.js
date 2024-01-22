@@ -60,7 +60,7 @@ const FormView = () => {
           <Text style={styles.label}>Nombre:</Text>
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
 
-          <Text style={styles.label}>Fecha:</Text>
+          <Text style={styles.label}>Fecha Consulta:</Text>
           {renderDatePicker()}
 
           <Text style={styles.label}>CC:</Text>
@@ -81,7 +81,6 @@ const FormView = () => {
               items={[
                 { label: 'Femenino', value: 'Femenino' },
                 { label: 'Masculino', value: 'Masculino' },
-                { label: 'No Binario', value: 'No Binario' },
                 { label: 'Otro', value: 'Otro' },
               ]}
               style={pickerSelectStyles}
