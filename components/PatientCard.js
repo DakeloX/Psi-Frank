@@ -19,8 +19,8 @@ const formatDate = (date) => {
 
 const styles = StyleSheet.create({
   container: {
-    width: '99%', // Ancho del 99% en dispositivos móviles
-    maxWidth: 450, // Ancho maximo fijado
+    minWidth: '90%',
+    maxWidth: 500, // Ancho maximo fijado
     minHeight: 120,
     backgroundColor: 'white',
     borderRadius: 10,

@@ -75,15 +75,16 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#181C42',
     alignSelf: 'center',
+    alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
   },
 
   formContainer: {
     width: '100%',
-    paddingHorizontal: 22,
     alignItems: 'center',
     justifyContent: 'center',
+    alignSelf: 'center',
   },
 
   title: {
