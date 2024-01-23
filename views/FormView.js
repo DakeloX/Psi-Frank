@@ -61,10 +61,12 @@ const FormView = () => {
           <Text style={styles.sectionTitle}>Información Personal</Text>
           <Text style={styles.label}>Nombre:</Text>
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
-          <Text style={styles.label}>Fecha de ingreso:</Text>
+          <Text style={styles.label}>Fecha de consulta:</Text>
+
 
           <View style={styles.dateInput}>
           {renderDatePicker()}
+        
           </View>
           
           <Text style={styles.label}>Documento de identidad:</Text>
@@ -106,7 +108,6 @@ const FormView = () => {
               items={[
                 { label: 'Femenino', value: 'Femenino' },
                 { label: 'Masculino', value: 'Masculino' },
-                { label: 'No Binario', value: 'No Binario' },
                 { label: 'Otro', value: 'Otro' },
               ]}
               style={pickerSelectStyles}
@@ -140,6 +141,28 @@ const FormView = () => {
 
           <Text style={styles.label}>Con quién vive:</Text>
           <TextInput style={styles.input} placeholder="Con quien vive el paciente"/>
+          <Text style={styles.label}>Acompañante:</Text>
+      <View style={styles.idnContainer}>
+
+
+        <View style={styles.pickerContainerIdn}>
+
+          <RNPickerSelect
+            placeholder={{ label: '>', value: null }}
+            onValueChange={(value) => setIdentidad(value)}
+            items={[
+              { label: 'Si', value: 'Si' },
+              { label: 'No', value: 'No' },
+            ]}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+          />
+        </View>
+
+        <View style={styles.emptyView}></View>
+
+      <TextInput style={styles.inputIdn} placeholder="Parentesco del acompañante"/>
+      </View>
 
         </View>
 
@@ -149,6 +172,46 @@ const FormView = () => {
           <Text style={styles.label}>Teléfono:</Text>
           <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
           {/* Otros campos de información de contacto */}
+        </View>
+
+                {/* Antecedentes */}
+        <View style={styles.formSection}>
+
+          <Text style={styles.sectionTitleMiddle}>Antecedentes</Text>
+
+          <Text style={styles.label}>Patológicos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+       
+          <Text style={styles.label}>Farmacológicos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Tóxicos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Quirúrgicos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Alergias:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Ginecológicos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Psiquiatricos:</Text>
+          <TextInput style={styles.input} placeholder=">"/>
+
+          <Text style={styles.label}>Antecedentes Psiquiatricos de familia:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+          <Text style={styles.label}>Examenes laboratorios:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+          <Text style={styles.label}>MC:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+          <Text style={styles.label}>EA:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
         </View>
 
         {/* Botón de Guardar */}
@@ -213,6 +276,16 @@ const styles = StyleSheet.create({
     minWidth: 350,
     maxWidth: 500,
   },
+  doubleInput: {
+    backgroundColor: '#fff',
+    height: 80,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    minWidth: 350,
+    maxWidth: 500,
+  },
   dateInput: {
     backgroundColor: '#fff',
     paddingLeft: 16,
@@ -257,7 +330,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     paddingHorizontal: 16,
-    paddingTop: 5,
+    paddingTop: 7,
     flex:0.18,
     marginRight:'10',
     
