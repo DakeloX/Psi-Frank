@@ -517,7 +517,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    minWidth: 350,
+    width: 350,
     maxWidth: 500,
   },
 
@@ -528,7 +528,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    minWidth: 350,
+    width: 350,
     maxWidth: 500,
   },
 
@@ -539,7 +539,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    minWidth: 350,
+    width: 350,
     maxWidth: 500,
   },
 
@@ -551,7 +551,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     height: 40,
     borderRadius: 8,
-    minWidth: 350,
+    width: 350,
     maxWidth: 500,
   },
 
@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 16,
     paddingTop: 5,
-    minWidth: 350,
+    width: 350,
     maxWidth: 500,
   },
 
