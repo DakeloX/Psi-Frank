@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
+import { CheckBox } from 'react-native-elements';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -10,7 +11,56 @@ const FormView = () => {
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [escolaridad, setEscolaridad] = useState(null);
+  const [conciencia, setConciencia] = useState(null);
+  const [curso, setCurso] = useState(null);
+  const [razonamiento, setRazonamiento] = useState(null);
+  const [ritmoLenguaje, setRitmoLenguaje] = useState(null);
+  const [juicio, setJuicio] = useState(null);
+  const [instrospeccion, setIntrospeccion] = useState(null);
+  const [prospeccion, setProspeccion] = useState(null);
+  const [civilState, setCivilState] = useState(null);
+
   const [isDatePickerVisible, setDatePickerVisible] = useState(false);
+
+  const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
+  const [isChecked, setChecked] = useState(false);
+  const [isChecked1, setChecked1] = useState(false);
+  const [isChecked2, setChecked2] = useState(false);
+  const [isChecked3, setChecked3] = useState(false);
+  const [isChecked4, setChecked4] = useState(false);
+  const [isChecked5, setChecked5] = useState(false);
+  const [isChecked6, setChecked6] = useState(false);
+  const [isChecked7, setChecked7] = useState(false);
+  const handleCheck1 = () => {
+    setChecked1(true);
+    setChecked2(false);
+  };
+
+  const handleCheck2 = () => {
+    setChecked1(false);
+    setChecked2(true);
+  };
+
+
+  const handleCheck3 = () => {
+    setChecked3(true);
+    setChecked4(false);
+  };
+
+  const handleCheck4 = () => {
+    setChecked3(false);
+    setChecked4(true);
+  };
+
+  const handleCheck5 = () => {
+    setChecked5(true);
+    setChecked6(false);
+  };
+
+  const handleCheck6 = () => {
+    setChecked5(false);
+    setChecked6(true);
+  };
 
   const showDatePicker = () => {
     setDatePickerVisible(true);
@@ -95,9 +145,30 @@ const FormView = () => {
 
           <Text style={styles.label}>Edad:</Text>
           <TextInput style={styles.input} placeholder="Ingresa la edad" keyboardType="numeric" />
+          
+          <Text style={styles.label}>Estado civil:</Text>
 
-          <Text style={styles.label}>Estado Civil:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa el estado civil" />
+          <View style={styles.pickerContainer}>
+        
+        <RNPickerSelect
+          placeholder={{ label: 'Selecciona estado civil', value: null }}
+          onValueChange={(value) => setCivilState(value)}
+          items={[
+            { label: 'Soltero/a', value: 'Soltero/a' },
+            { label: 'Casado/a', value: 'Casado/a' },
+            { label: 'Unión Libre', value: 'Unión Libre' },
+            { label: 'Divorciado/a', value: 'Divorciado/a' },
+            { label: 'Viudo/a', value: 'Viudo/a' },
+            { label: 'Separado/a', value: 'Separado/a' },
+            { label: 'Comprometido/a', value: 'Comprometido/a' },
+            { label: 'Conviviente', value: 'Conviviente' },
+            { label: 'No especificado', value: 'No especificado' },
+          ]}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+        />
+      </View>
+
           <Text style={styles.label}>Sexo:</Text>
 
           <View style={styles.pickerContainer}>
@@ -126,6 +197,7 @@ const FormView = () => {
           placeholder={{ label: 'Selecciona el nivel', value: null }}
           onValueChange={(value) => setEscolaridad(value)}
           items={[
+            { label: 'No aplica', value: 'No aplica' },
             { label: 'Preescolar', value: 'Preescolar' },
             { label: 'Educación Basica', value: 'EduBasica' },
             { label: 'Educación Media', value: 'EduMedia' },
@@ -144,18 +216,12 @@ const FormView = () => {
           <Text style={styles.label}>Acompañante:</Text>
       <View style={styles.idnContainer}>
 
+        <View style={styles.checkBoxContainer}>
 
-        <View style={styles.pickerContainerIdn}>
-
-          <RNPickerSelect
-            placeholder={{ label: '>', value: null }}
-            onValueChange={(value) => setIdentidad(value)}
-            items={[
-              { label: 'Si', value: 'Si' },
-              { label: 'No', value: 'No' },
-            ]}
-            style={pickerSelectStyles}
-            useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+        <CheckBox
+            checked={isCheckedAcompañante}
+            onPress={() => setCheckedAcompañante(!isCheckedAcompañante)}
+            containerStyle={{ width: 40, height: 80, marginTop: -1.3, }}
           />
         </View>
 
@@ -213,7 +279,206 @@ const FormView = () => {
           <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
 
         </View>
+        <View style={styles.formSection}>
 
+         <Text style={styles.sectionTitleMiddle}>Examen mental</Text>
+
+         <Text style={styles.label}>prosopografía {'\n'}(Aspecto, Actitud, Presentación): </Text>
+        <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+        <Text style={styles.label}>Orietación: </Text>
+        <View style = {styles.checkBox}>
+          <CheckBox
+            title='Autopsíquica'
+            checked={isChecked1}
+            onPress={handleCheck1}
+          />
+           <CheckBox
+            title='Alopsíquica'
+            checked={isChecked2}
+            onPress={handleCheck2}          />
+        </View>
+
+        <Text style={styles.label}>Conciencia: </Text>
+        <View style = {styles.checkBox}>
+          <CheckBox
+            title='Situación'
+            checked={isChecked3}
+            onPress={handleCheck3}
+          />
+           <CheckBox
+            title='De enfermedad'
+            checked={isChecked4}
+            onPress={handleCheck4}          />
+        </View>
+        <View style={styles.pickerContainer}>
+
+          <RNPickerSelect
+            placeholder={{ label: 'Selecciona nivel de conciencia', value: null }}
+            onValueChange={(value) => setConciencia(value)}
+            items={[
+              { label: 'Alerta', value: 'Alerta' },
+              { label: 'Hipolucido', value: 'Hipolucido' },
+              { label: 'Somnolencia', value: 'Somnolencia' },
+              { label: 'Obnubilado', value: 'Obnubilado' },
+              { label: 'Coma', value: 'Coma' },
+            ]}
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+        />
+    </View>
+          <Text style={styles.label}>Atención:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+          <Text style={styles.label}>Sensopercepción:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+          <Text style={styles.highLabel}>Ideación o Pensamiento:</Text>
+          <Text style={styles.label}>Curso:</Text>
+          <View style={styles.pickerContainer}>
+
+        <RNPickerSelect
+          placeholder={{ label: 'Selecciona curso', value: null }}
+          onValueChange={(value) => setCurso(value)}
+          items={[
+            { label: 'Acelerado', value: 'Acelerado' },
+            { label: 'Retardado', value: 'Retardado' },
+            { label: 'Prolijo', value: 'Prolijo' },
+            { label: 'Estereotipado', value: 'Estereotipado' },
+            { label: 'ecolalia', value: 'ecolalia' },
+            { label: 'interceptado', value: 'interceptado' },
+            { label: 'disgregado', value: 'disgregado' },
+            { label: 'coherente', value: 'coherente' },
+            { label: 'Incoherente', value: 'Incoherente' },
+          ]}
+          style={pickerSelectStyles}
+          useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+        />
+      </View>
+      <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+      <Text style={styles.label}>Razonamiento:</Text>
+      <View style={styles.pickerContainer}>
+
+<RNPickerSelect
+  placeholder={{ label: 'Selecciona tipo de razonamiento', value: null }}
+  onValueChange={(value) => setRazonamiento(value)}
+  items={[
+    { label: 'Lógico', value: 'Lógico' },
+    { label: 'Ilógico', value: 'Ilógico' },
+    { label: 'Analógico', value: 'Analógico' },
+  ]}
+  style={pickerSelectStyles}
+  useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+/>
+</View>
+    <Text style={styles.label}>Memoria:</Text>
+    <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+    <Text style={styles.highLabel}>Lenguaje:</Text>
+    <Text style={styles.label}>Ritmo:</Text>
+
+    <View style={styles.pickerContainer}>
+
+<RNPickerSelect
+  placeholder={{ label: 'Selecciona el ritmo', value: null }}
+  onValueChange={(value) => setRitmoLenguaje(value)}
+  items={[
+    { label: 'Normal', value: 'Normal' },
+    { label: 'Acelerado', value: 'Acelerado' },
+    { label: 'Retardado', value: 'Retardado' },
+  ]}
+  style={pickerSelectStyles}
+  useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+/>
+</View>
+<View style = {styles.checkBox}>
+          <CheckBox
+            title='Coherente'
+            checked={isChecked5}
+            onPress={handleCheck5}
+          />
+           <CheckBox
+            title='Incoherente'
+            checked={isChecked6}
+            onPress={handleCheck6}          />
+        </View>
+
+        <View style={styles.checkBox}>
+
+          <CheckBox
+            title={'Muletillas'}
+            checked={isChecked}
+            onPress={() => setChecked(!isChecked)}
+          />
+        </View>
+        <Text style={styles.label}>Estado de ánimo:</Text>
+        <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+        <Text style={styles.label}>Sueño:</Text>
+        <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+        <Text style={styles.label}>Orexia:</Text>
+        <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+        <Text style={styles.label}>Juicio:</Text>
+
+        <View style={styles.pickerContainer}>
+
+          <RNPickerSelect
+            placeholder={{ label: 'Selecciona juicio', value: null }}
+            onValueChange={(value) => setJuicio(value)}
+            items={[
+              { label: 'Normal', value: 'Normal' },
+              { label: 'Desviado ', value: 'Desviado ' },
+              { label: 'Deficiente ', value: 'Deficiente ' },
+              { label: 'Debilitado', value: 'Debilitado' },
+              { label: 'Suspendido', value: 'Suspendido' },
+            ]}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+          />
+        </View>
+
+        <Text style={styles.label}>Conducta:</Text>
+        <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+
+        <Text style={styles.label}>Introspección:</Text>
+
+<View style={styles.pickerContainer}>
+
+          <RNPickerSelect
+            placeholder={{ label: 'Selecciona introspección', value: null }}
+            onValueChange={(value) => setIntrospeccion(value)}
+            items={[
+              { label: 'Pobre', value: 'Pobre' },
+              { label: 'Nula', value: 'Nula' },
+              { label: 'Conservada', value: 'Conservada' },
+            ]}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+          />
+        </View>
+
+        <Text style={styles.label}>Prospección:</Text>
+
+          <View style={styles.pickerContainer}>
+
+          <RNPickerSelect
+            placeholder={{ label: 'Selecciona prospección', value: null }}
+            onValueChange={(value) => setProspeccion(value)}
+            items={[
+              { label: 'Pobre', value: 'Pobre' },
+              { label: 'Nula', value: 'Nula' },
+              { label: 'Conservada', value: 'Conservada' },
+            ]}
+            style={pickerSelectStyles}
+            useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+          />
+        </View>
+
+        <Text style={styles.highLabel}>Análisis:</Text>
+        <TextInput style={styles.tripleInput} placeholder=">" multiline={true}/>
+      </View>
         {/* Botón de Guardar */}
         <TouchableOpacity style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Guardar</Text>
@@ -249,14 +514,14 @@ const styles = StyleSheet.create({
   },
   sectionTitle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 8,
     marginTop: 16,
   },
   sectionTitleMiddle: {
     color: '#fff',
-    fontSize: 20,
+    fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 8,
     marginTop: 7,
@@ -265,6 +530,12 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     marginTop: 8,
+  },
+  highLabel: {
+    color: '#fff',
+    fontSize: 20,
+    marginTop: 8,
+    fontWeight: 'bold',
   },
   input: {
     backgroundColor: '#fff',
@@ -285,6 +556,16 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     minWidth: 350,
     maxWidth: 500,
+  },
+  tripleInput:{
+  backgroundColor: '#fff',
+  height: 100,
+  borderRadius: 8,
+  paddingHorizontal: 16,
+  marginTop: 8,
+  marginBottom: 8,
+  minWidth: 350,
+  maxWidth: 500,
   },
   dateInput: {
     backgroundColor: '#fff',
@@ -351,6 +632,21 @@ const styles = StyleSheet.create({
     fontSize: 18,
     fontWeight: 'bold',
   },
+  checkBox:{
+    flexDirection:'row',
+    width: '100%',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  checkBoxContainer:{
+    backgroundColor: '#fff',
+    flex: 0.18,
+    alignItems: 'center', // Puedes ajustar según sea necesario
+    borderRadius: 8,
+    height:40,
+    marginTop: 8,
+  },
+
 });
 
 const pickerSelectStyles = StyleSheet.create({
