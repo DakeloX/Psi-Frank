@@ -19,11 +19,10 @@ const handleLogin = () => {
 
 return (
     <View style={styles.container}>
-
         <Image source={require('../images/Logo_Lobo.png')} style={styles.logo} />
         <Text style={styles.LogoTitle}>Psi-Frank</Text>
-    <Text style={styles.title}>Ingrese su PIN</Text>
-    <TextInput
+        <Text style={styles.title}>Ingrese su PIN</Text>
+        <TextInput
         style={styles.input}
         secureTextEntry
         placeholder="PIN"
@@ -31,10 +30,10 @@ return (
         value={pin}
         onChangeText={setPin}
         onSubmitEditing={handleLogin} // Agregado para manejar la acción de "Enter"
-    />
-    <TouchableOpacity style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Iniciar Sesión</Text>
-    </TouchableOpacity>
+        />
+        <TouchableOpacity style={styles.button} onPress={handleLogin}>
+            <Text style={styles.buttonText}>Iniciar Sesión</Text>
+        </TouchableOpacity>
     </View>
 );  
 };

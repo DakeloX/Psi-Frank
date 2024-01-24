@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row', // Keep it as 'row'
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 20,
+    marginTop: 45,
     paddingHorizontal: 10,
     width: '100%',
   },
@@ -51,9 +51,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   logo: {
-    width: 90,
-    height: 90,
-    borderRadius: 36,
+    width: 100,
+    height: 100,
     marginRight: 16,
   },
   title: {
@@ -62,7 +61,7 @@ const styles = StyleSheet.create({
     color: '#fff',
   },
   rightContainer: {
-    padding: 40,
+    padding: 38,
     borderRadius: 10,
     marginRight: -10,
   },
