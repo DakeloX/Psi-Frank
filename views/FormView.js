@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
 import { CheckBox } from 'react-native-elements';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import RNPickerSelect from 'react-native-picker-select';
 
 const FormView = () => {
-  const [date, setDate] = useState(new Date());
+  const [fechaConsulta, setFechaConsulta] = useState(new Date());
+  const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [escolaridad, setEscolaridad] = useState(null);
@@ -43,45 +44,6 @@ const FormView = () => {
     setChecked6(true);
   };
 
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
-
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const handleDateConfirm = (selectedDate) => {
-    hideDatePicker();
-    setDate(selectedDate);
-  };
-  
-  const renderDatePicker = () => {
-    if (Platform.OS === 'web') {
-      return (
-        <input
-          type="date"
-          value={date.toISOString().split('T')[0]}
-          onChange={(e) => setDate(new Date(e.target.value))}
-        />
-      );
-    } else {
-      return (
-        <>
-          <TouchableOpacity onPress={showDatePicker}>
-            <Text>{date.toDateString()}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleDateConfirm}
-            onCancel={hideDatePicker}
-          />
-        </>
-      );
-    }
-  };
-
   return (
     <View style={styles.container}>
       <Header logo={require('../images/Logo_Lobo.png')} title="Pacientes" />
@@ -94,9 +56,10 @@ const FormView = () => {
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
 
           <Text style={styles.label}>Fecha de consulta:</Text>
-          <View style={styles.dateInput}>
-            {renderDatePicker()} 
-          </View>
+          <SelectFecha
+            selectedDate={fechaConsulta}
+            onDateChange={setFechaConsulta}
+          />
           
           <Text style={styles.label}>Documento de identidad:</Text>
           <View style={styles.idnContainer}>
@@ -108,6 +71,7 @@ const FormView = () => {
                   { label: 'C.C', value: 'CC' },
                   { label: 'T.I', value: 'TI' },
                   { label: 'P.A', value: 'PA' },
+                  { label: 'Otro', value: 'Otro' },
                 ]}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
@@ -117,8 +81,11 @@ const FormView = () => {
             <TextInput style={styles.inputIdn} placeholder="Ingresa documento" keyboardType="numeric" />
           </View>
           
-          <Text style={styles.label}>Edad:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la edad" keyboardType="numeric" />
+          <Text style={styles.label}>Fecha de nacimiento:</Text>
+          <SelectFecha
+            selectedDate={fechaNacimiento}
+            onDateChange={setFechaNacimiento}
+          />
           
           <Text style={styles.label}>Estado civil:</Text>
           <View style={styles.pickerContainer}>
@@ -238,13 +205,13 @@ const FormView = () => {
           <Text style={styles.label}>Antecedentes Psiquiatricos de familia:</Text>
           <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
 
-          <Text style={styles.label}>Examenes laboratorios:</Text>
+          <Text style={styles.label}>Examenes Laboratorios:</Text>
           <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
 
-          <Text style={styles.label}>MC:</Text>
+          <Text style={styles.label}>Motivo Consulta:</Text>
           <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
 
-          <Text style={styles.label}>EA:</Text>
+          <Text style={styles.label}>Enfermedad Actual:</Text>
           <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
         </View>
 
@@ -494,7 +461,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 8,
-    marginTop: 7,
+    marginTop: 6,
   },
 
   label: {
@@ -543,18 +510,6 @@ const styles = StyleSheet.create({
     maxWidth: 500,
   },
 
-  dateInput: {
-    backgroundColor: '#fff',
-    paddingLeft: 16,
-    paddingTop: 8,
-    marginTop: 8,
-    marginBottom: 8,
-    height: 40,
-    borderRadius: 8,
-    minWidth: 350,
-    maxWidth: 500,
-  },
-
   pickerContainer: {
     backgroundColor: '#fff',
     height: 40,
@@ -592,7 +547,6 @@ const styles = StyleSheet.create({
     paddingTop: 7,
     flex:0.18,
     marginRight:'10',
-    
   },
 
   emptyView: {
