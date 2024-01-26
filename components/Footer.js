@@ -24,6 +24,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     left: 0,
     right: 0,
+    //marginTop: 10,
   },
   footerText: {
     color: 'white',

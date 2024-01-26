@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform, FlatList } from 'react-native';
 import { CheckBox } from 'react-native-elements';
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Tabla from '../components/Tabla';
 import RNPickerSelect from 'react-native-picker-select';
 
 const FormView = () => {
-  const [date, setDate] = useState(new Date());
+  const [fechaConsulta, setFechaConsulta] = useState(new Date());
+  const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [escolaridad, setEscolaridad] = useState(null);
@@ -32,6 +34,14 @@ const FormView = () => {
   const [isChecked4, setChecked4] = useState(false);
   const [isChecked5, setChecked5] = useState(false);
   const [isChecked6, setChecked6] = useState(false);
+  const [isCheckedPatologia, setCheckedPatologia] = useState(false);
+  const [isCheckedFarmaco, setCheckedFarmaco] = useState(false);
+  const [isCheckedQuirur, setCheckedQuirur] = useState(false);
+  const [isCheckedToxicos, setCheckedToxicos] = useState(false);
+  const [isCheckedAlergias, setCheckedAlergias] = useState(false);
+  const [isCheckedGinec, setCheckedGinec] = useState(false);
+  const [isCheckedPsiq, setCheckedPsiq] = useState(false);
+  const [isCheckedPsiqFamilia, setCheckedPsiqFamilia] = useState(false);
 
   const handleCheck5 = () => {
     setChecked5(true);
@@ -43,43 +53,11 @@ const FormView = () => {
     setChecked6(true);
   };
 
-  const showDatePicker = () => {
-    setDatePickerVisible(true);
-  };
+  const [tableContainerHeight, setTableContainerHeight] = useState(300); // Altura inicial del contenedor externo
 
-  const hideDatePicker = () => {
-    setDatePickerVisible(false);
-  };
-
-  const handleDateConfirm = (selectedDate) => {
-    hideDatePicker();
-    setDate(selectedDate);
-  };
-  
-  const renderDatePicker = () => {
-    if (Platform.OS === 'web') {
-      return (
-        <input
-          type="date"
-          value={date.toISOString().split('T')[0]}
-          onChange={(e) => setDate(new Date(e.target.value))}
-        />
-      );
-    } else {
-      return (
-        <>
-          <TouchableOpacity onPress={showDatePicker}>
-            <Text>{date.toDateString()}</Text>
-          </TouchableOpacity>
-          <DateTimePickerModal
-            isVisible={isDatePickerVisible}
-            mode="date"
-            onConfirm={handleDateConfirm}
-            onCancel={hideDatePicker}
-          />
-        </>
-      );
-    }
+  const handleTableHeightChange = (height) => {
+    // Actualiza la altura del contenedor externo según la altura de la tabla
+    setTableContainerHeight(height);
   };
 
   return (
@@ -89,15 +67,16 @@ const FormView = () => {
         {/* Información Personal */}
         <View style={styles.formSection}>
           <Text style={styles.sectionTitle}>Información Personal</Text>
-          
+
           <Text style={styles.label}>Nombre:</Text>
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
 
           <Text style={styles.label}>Fecha de consulta:</Text>
-          <View style={styles.dateInput}>
-            {renderDatePicker()} 
-          </View>
-          
+          <SelectFecha
+            selectedDate={fechaConsulta}
+            onDateChange={setFechaConsulta}
+          />
+
           <Text style={styles.label}>Documento de identidad:</Text>
           <View style={styles.idnContainer}>
             <View style={styles.pickerContainerIdn}>
@@ -108,6 +87,7 @@ const FormView = () => {
                   { label: 'C.C', value: 'CC' },
                   { label: 'T.I', value: 'TI' },
                   { label: 'P.A', value: 'PA' },
+                  { label: 'Otro', value: 'Otro' },
                 ]}
                 style={pickerSelectStyles}
                 useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
@@ -116,10 +96,13 @@ const FormView = () => {
             <View style={styles.emptyView}></View>
             <TextInput style={styles.inputIdn} placeholder="Ingresa documento" keyboardType="numeric" />
           </View>
-          
-          <Text style={styles.label}>Edad:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la edad" keyboardType="numeric" />
-          
+
+          <Text style={styles.label}>Fecha de nacimiento:</Text>
+          <SelectFecha
+            selectedDate={fechaNacimiento}
+            onDateChange={setFechaNacimiento}
+          />
+
           <Text style={styles.label}>Estado civil:</Text>
           <View style={styles.pickerContainer}>
             <RNPickerSelect
@@ -157,7 +140,7 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Ocupación:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la ocupación"/>
+          <TextInput style={styles.input} placeholder="Ingresa la ocupación" />
 
           <Text style={styles.label}>Escolaridad:</Text>
 
@@ -176,22 +159,22 @@ const FormView = () => {
               useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
             />
           </View>
-          
+
           <Text style={styles.label}>Religión:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la religión"/>
-          
+          <TextInput style={styles.input} placeholder="Ingresa la religión" />
+
           <Text style={styles.label}>Con quién vive:</Text>
-          <TextInput style={styles.input} placeholder="Con quien vive el paciente"/>
-          
+          <TextInput style={styles.input} placeholder="Con quien vive el paciente" />
+
           <Text style={styles.label}>Acompañante:</Text>
           <View style={styles.idnContainer}>
-          <View style={styles.checkBoxContainer}>
-            <CheckBox
-              checked={isCheckedAcompañante}
-              onPress={() => setCheckedAcompañante(!isCheckedAcompañante)}
-              containerStyle={{ width: 40, height: 80, marginTop: -1.3, }}
-            />
-          </View>
+            <View style={styles.checkBoxContainer}>
+              <CheckBox
+                checked={isCheckedAcompañante}
+                onPress={() => setCheckedAcompañante(!isCheckedAcompañante)}
+                containerStyle={{ width: 40, height: 80, marginTop: -1.3, }}
+              />
+            </View>
             <View style={styles.emptyView}></View>
             <TextInput
               style={styles.inputIdn}
@@ -210,52 +193,190 @@ const FormView = () => {
           <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
           {/* Otros campos de información de contacto */}
         </View>
-                {/* Antecedentes */}
+        {/* Antecedentes */}
         <View style={styles.formSection}>
           <Text style={styles.sectionTitleMiddle}>Antecedentes</Text>
 
-          <Text style={styles.label}>Patológicos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Patológicos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedPatologia}
+                onPress={() => setCheckedPatologia(!isCheckedPatologia)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
 
-          <Text style={styles.label}>Farmacológicos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedPatologia}
+          />
 
-          <Text style={styles.label}>Tóxicos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Farmacológicos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedFarmaco}
+                onPress={() => setCheckedFarmaco(!isCheckedFarmaco)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedFarmaco}
+          />
 
-          <Text style={styles.label}>Quirúrgicos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Tóxicos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedToxicos}
+                onPress={() => setCheckedToxicos(!isCheckedToxicos)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedToxicos}
+          />
 
-          <Text style={styles.label}>Alergias:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Quirúrgicos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedQuirur}
+                onPress={() => setCheckedQuirur(!isCheckedQuirur)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedQuirur}
+          />
 
-          <Text style={styles.label}>Ginecológicos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Alergias:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedAlergias}
+                onPress={() => setCheckedAlergias(!isCheckedAlergias)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedAlergias}
+          />
 
-          <Text style={styles.label}>Psiquiatricos:</Text>
-          <TextInput style={styles.input} placeholder=">"/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Ginecológicos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedGinec}
+                onPress={() => setCheckedGinec(!isCheckedGinec)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedGinec}
+          />
 
-          <Text style={styles.label}>Antecedentes Psiquiatricos de familia:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Psiquiatricos:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedPsiq}
+                onPress={() => setCheckedPsiq(!isCheckedPsiq)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.input}
+            placeholder=">"
+            editable={!isCheckedPsiq}
+          />
 
-          <Text style={styles.label}>Examenes laboratorios:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <View style={styles.checkBoxAntecedetes}>
+            <Text style={styles.labelAntecedentes}>Antecedentes {'\n'}Psiquiatricos de {'\n'}familia:</Text>
+            <View style={styles.checkBoxSpace}>
+              <CheckBox
+                title='Niega'
+                checked={isCheckedPsiqFamilia}
+                onPress={() => setCheckedPsiqFamilia(!isCheckedPsiqFamilia)}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+            </View>
+          </View>
+          <TextInput style={styles.doubleInput}
+            placeholder=">"
+            editable={!isCheckedPsiqFamilia}
+            multiline={true}
+          />
 
-          <Text style={styles.label}>MC:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <Text style={styles.label}>Examenes Laboratorios:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
-          <Text style={styles.label}>EA:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <Text style={styles.label}>Motivo Consulta:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
+
+          <Text style={styles.label}>Enfermedad Actual:</Text>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
         </View>
 
         <View style={styles.formSection}>
           <Text style={styles.sectionTitleMiddle}>Examen mental</Text>
 
           <Text style={styles.label}>Prosopografía: </Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Orietación: </Text>
-          <View style = {styles.checkBox}>
+          <View style={styles.checkBox}>
             <CheckBox
               title='Autopsíquica'
               checked={isChecked1}
@@ -264,12 +385,12 @@ const FormView = () => {
             <CheckBox
               title='Alopsíquica'
               checked={isChecked2}
-              onPress={() => setChecked2(!isChecked2)}          
+              onPress={() => setChecked2(!isChecked2)}
             />
           </View>
 
           <Text style={styles.label}>Situación de: </Text>
-          <View style = {styles.checkBox}>
+          <View style={styles.checkBox}>
             <CheckBox
               title='Conciencia'
               checked={isChecked3}
@@ -278,7 +399,7 @@ const FormView = () => {
             <CheckBox
               title='Enfermedad'
               checked={isChecked4}
-              onPress={() => setChecked4(!isChecked4)}          
+              onPress={() => setChecked4(!isChecked4)}
             />
           </View>
 
@@ -293,16 +414,16 @@ const FormView = () => {
                 { label: 'Obnubilado', value: 'Obnubilado' },
                 { label: 'Coma', value: 'Coma' },
               ]}
-                style={pickerSelectStyles}
-                useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+              style={pickerSelectStyles}
+              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
             />
           </View>
 
           <Text style={styles.label}>Atención:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Sensopercepción:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.highLabel}>Ideación o Pensamiento:</Text>
           <Text style={styles.label}>Curso:</Text>
@@ -326,7 +447,7 @@ const FormView = () => {
             />
           </View>
 
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
           <Text style={styles.label}>Razonamiento:</Text>
           <View style={styles.pickerContainer}>
             <RNPickerSelect
@@ -343,7 +464,7 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Memoria:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.highLabel}>Lenguaje:</Text>
           <Text style={styles.label}>Ritmo:</Text>
@@ -362,7 +483,7 @@ const FormView = () => {
             />
           </View>
 
-          <View style = {styles.checkBox}>
+          <View style={styles.checkBox}>
             <CheckBox
               title='Coherente'
               checked={isChecked5}
@@ -371,7 +492,7 @@ const FormView = () => {
             <CheckBox
               title='Incoherente'
               checked={isChecked6}
-              onPress={handleCheck6}          
+              onPress={handleCheck6}
             />
           </View>
 
@@ -384,13 +505,13 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Estado de ánimo:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Sueño:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Orexia:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Juicio:</Text>
 
@@ -411,7 +532,7 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Conducta:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
 
           <Text style={styles.label}>Introspección:</Text>
 
@@ -445,8 +566,16 @@ const FormView = () => {
           </View>
 
           <Text style={styles.highLabel}>Análisis:</Text>
-          <TextInput style={styles.tripleInput} placeholder=">" multiline={true}/>
+          <TextInput style={styles.tripleInput} placeholder=">" multiline={true} />
         </View>
+
+
+        <View style = {styles.tableContainer}>
+  
+            <Tabla onTableHeightChange={handleTableHeightChange}/>
+
+        </View>
+
         {/* Botón de Guardar */}
         <TouchableOpacity style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Guardar</Text>
@@ -494,7 +623,7 @@ const styles = StyleSheet.create({
     fontSize: 22,
     fontWeight: 'bold',
     marginBottom: 8,
-    marginTop: 7,
+    marginTop: 6,
   },
 
   label: {
@@ -518,7 +647,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     width: 350,
-    maxWidth: 500,
+    //maxWidth: 500,
   },
 
   doubleInput: {
@@ -529,10 +658,10 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     width: 350,
-    maxWidth: 500,
+    //maxWidth: 500,
   },
 
-  tripleInput:{
+  tripleInput: {
     backgroundColor: '#fff',
     height: 100,
     borderRadius: 8,
@@ -540,19 +669,7 @@ const styles = StyleSheet.create({
     marginTop: 8,
     marginBottom: 8,
     width: 350,
-    maxWidth: 500,
-  },
-
-  dateInput: {
-    backgroundColor: '#fff',
-    paddingLeft: 16,
-    paddingTop: 8,
-    marginTop: 8,
-    marginBottom: 8,
-    height: 40,
-    borderRadius: 8,
-    width: 350,
-    maxWidth: 500,
+    //maxWidth: 500,
   },
 
   pickerContainer: {
@@ -564,15 +681,15 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     paddingTop: 5,
     width: 350,
-    maxWidth: 500,
+    //maxWidth: 500,
   },
 
-  idnContainer:{
+  idnContainer: {
     flexDirection: 'row', // Para que los objetos estén en línea horizontal
     flex: 1, // Para que el contenedor ocupe todo el espacio disponible
   },
 
-  inputIdn:{
+  inputIdn: {
     backgroundColor: '#fff',
     height: 40,
     borderRadius: 8,
@@ -590,14 +707,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 16,
     paddingTop: 7,
-    flex:0.18,
-    marginRight:'10',
-    
+    flex: 0.18,
+    marginRight: '10',
   },
 
   emptyView: {
     height: 40,
-    flex:0.02,
+    flex: 0.02,
   },
 
   submitButton: {
@@ -605,7 +721,8 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 64,
+    marginBottom: 74,
+    marginTop: 10,
   },
 
   submitButtonText: {
@@ -614,20 +731,40 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 
-  checkBox:{
-    flexDirection:'row',
-    width: '100%',
-    alignItems: 'center',
-    justifyContent: 'center',
+  checkBox: {
+    flexDirection: 'row',
+    //width: '100%',
+    alignSelf: 'center',
+    justifyContent: 'flex-end',
   },
 
-  checkBoxContainer:{
+  checkBoxSpace: {
+    flexDirection: 'row',
+    //width: '100%',
+    //alignSelf: 'center',
+    justifyContent: 'flex-start',
+    flex: 0.5,
+  },
+  checkBoxContainer: {
     backgroundColor: '#fff',
     flex: 0.18,
     alignItems: 'center', // Puedes ajustar según sea necesario
     borderRadius: 8,
-    height:40,
+    height: 40,
     marginTop: 8,
+  },
+  checkBoxAntecedetes: {
+    flexDirection: 'row',
+    width: 350,
+  },
+  labelAntecedentes: {
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 8,
+    flex: 0.5,
+  },
+  tableContainer: {
+    width: 350,
   },
 });
 
