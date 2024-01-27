@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform, FlatList } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import RNPickerSelect from 'react-native-picker-select';
 import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Tabla from '../components/Tabla';
-import RNPickerSelect from 'react-native-picker-select';
 
 const FormView = () => {
-  const [fechaConsulta, setFechaConsulta] = useState(new Date());
+
   const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
@@ -21,8 +21,6 @@ const FormView = () => {
   const [instrospeccion, setIntrospeccion] = useState(null);
   const [prospeccion, setProspeccion] = useState(null);
   const [civilState, setCivilState] = useState(null);
-
-  const [isDatePickerVisible, setDatePickerVisible] = useState(false);
 
   const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
   const [parentescoAcompañante, setParentescoAcompañante] = useState('');
@@ -70,12 +68,6 @@ const FormView = () => {
 
           <Text style={styles.label}>Nombre:</Text>
           <TextInput style={styles.input} placeholder="Ingrese el nombre" />
-
-          <Text style={styles.label}>Fecha de consulta:</Text>
-          <SelectFecha
-            selectedDate={fechaConsulta}
-            onDateChange={setFechaConsulta}
-          />
 
           <Text style={styles.label}>Documento de identidad:</Text>
           <View style={styles.idnContainer}>

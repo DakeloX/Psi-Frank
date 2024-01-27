@@ -29,6 +29,7 @@ return (
         keyboardType="numeric"
         value={pin}
         onChangeText={setPin}
+        returnKeyType="done"
         onSubmitEditing={handleLogin} // Agregado para manejar la acción de "Enter"
         />
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
