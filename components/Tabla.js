@@ -4,7 +4,7 @@ import { Table, Row } from 'react-native-table-component';
 
 const TablaComponent = ({ onTableHeightChange }) => {
   const [tabla, setTabla] = useState([
-    ['Nueva Columna', '8AM', '12PM', '4PM', '9PM'],
+    ['Medicamento', '8AM', '12PM', '4PM', '9PM'],
     Array(5).fill(''),
   ]);
 
@@ -43,22 +43,27 @@ const TablaComponent = ({ onTableHeightChange }) => {
       data={rowData.map((cellData, cellIndex) => (
         <View key={cellIndex} style={[styles.celda, { backgroundColor: rowIndex % 2 === 1 ? '#e0e0e0' : '#f5f5f5' }]}>
           {rowIndex === 0 ? (
-            <Text style={styles.celdaTexto}>{cellData}</Text>
+            <Text style={{ ...styles.celdaTexto }}>{cellData}</Text>
           ) : (
-            <TouchableOpacity onPress={() => comenzarEdicion(rowIndex, cellIndex)}>
-              {editedRowIndex === rowIndex && editedColumnIndex === cellIndex ? (
-                <TextInput
-                  style={styles.input}
-                  value={tabla[rowIndex][cellIndex]}
-                  onChangeText={handleInputChange}
-                  onBlur={finalizarEdicion}
-                  autoFocus
-                  multiline={true}
-                />
-              ) : (
-                <Text style={styles.celdaTexto}>{cellData}</Text>
-              )}
-            </TouchableOpacity>
+            <View style={styles.inputWrapper}>
+              <TouchableOpacity
+                onPress={() => comenzarEdicion(rowIndex, cellIndex)}
+                style={styles.inputContainer}
+              >
+                {editedRowIndex === rowIndex && editedColumnIndex === cellIndex ? (
+                  <TextInput
+                    style={styles.input}
+                    value={tabla[rowIndex][cellIndex]}
+                    onChangeText={handleInputChange}
+                    onBlur={finalizarEdicion}
+                    autoFocus
+                    multiline={true}
+                  />
+                ) : (
+                  <Text style={styles.celdaTexto}>{cellData}</Text>
+                )}
+              </TouchableOpacity>
+            </View>
           )}
         </View>
       ))}
@@ -101,7 +106,6 @@ const TablaComponent = ({ onTableHeightChange }) => {
 const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
-  
   },
   scrollContainer: {
     width: 350, // Ancho fijo de 350 píxeles
@@ -116,23 +120,28 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
+
     borderWidth: 0.3, // Quita el borde
   },
   celdaTexto: {
     textAlign: 'center',
     fontWeight: 'bold',
-    padding: 10,
+  },
+  inputWrapper: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    width: 150, // Ajusta el ancho según sea necesario
+
+  },
+  inputContainer: {
+    flex: 1,
+    width: '100%', // Ocupa todo el ancho del contenedor
   },
   input: {
     textAlign: 'center',
-    padding: 10,
-    borderTopWidth: 0, // Quita el borde superior
-    borderBottomWidth: 0, // Quita el borde inferior
-    borderLeftWidth: 1, // Quita el borde izquierdo
-    borderRightWidth: 1, // Quita el borde derecho
-    borderLeftColor: 'black', // Color del borde izquierdo
-    borderRightColor: 'black', // Color del borde derecho
-    width: 150, // Ajusta el ancho según sea necesario
+    width: '100%', // Ocupa todo el ancho del contenedor
+    height: '100%',
   },
   botonesContenedor: {
     flexDirection: 'row',
