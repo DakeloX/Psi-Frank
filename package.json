@@ -30,6 +30,7 @@
     "react-native-modal-dropdown": "^1.0.2",
     "react-native-modal-selector": "^2.1.2",
     "react-native-picker-select": "^9.0.0",
+    "react-native-reanimated-table": "^0.0.2",
     "react-native-screens": "~3.22.0",
     "react-native-stack": "^1.0.0-alpha11",
     "react-native-table-component": "^1.2.2",

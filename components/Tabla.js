@@ -60,7 +60,7 @@ const TablaComponent = ({ onTableHeightChange }) => {
                     multiline={true}
                   />
                 ) : (
-                  <Text style={styles.celdaTexto}>{cellData}</Text>
+                  <Text style={{ ...styles.celdaTexto }}>{cellData}</Text>
                 )}
               </TouchableOpacity>
             </View>
@@ -69,7 +69,7 @@ const TablaComponent = ({ onTableHeightChange }) => {
       ))}
       key={rowIndex}
       style={styles.fila}
-      textStyle={styles.celdaTexto}
+      textStyle={{ ...styles.celdaTexto }}
       widthArr={[150, 150, 150, 150, 150]}
     />
   );
@@ -147,6 +147,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     marginTop: 10,
+    marginBottom: 10,
   },
   boton: {
     padding: 10,

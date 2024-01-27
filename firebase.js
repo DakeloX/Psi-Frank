@@ -14,4 +14,7 @@ const firebaseConfig = {
 const firebaseApp = initializeApp(firebaseConfig);
 const database = getDatabase(firebaseApp);
 
+// Console.log para indicar que se conectó exitosamente a la base de datos
+console.log("Conexión exitosa a la base de datos");
+
 export { database };
