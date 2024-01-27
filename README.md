@@ -9,3 +9,7 @@ Subir avances a clinic:
   git add .
   git commit -m "message"
   git push origin clinic
+
+Copiar avances de clinic:
+  git init
+  git pull origin clinic

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import FirebaseDemo from '../components/FirebaseDemo';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import NewPatient from '../components/BtnNewPatient';
@@ -64,6 +65,7 @@ const HomeView = () => {
         <TouchableOpacity onPress={handleViewAllPress}>
           <Text style={styles.viewAllText}>Ver Todos</Text>
         </TouchableOpacity>
+        <FirebaseDemo />
       </ScrollView>
       <Footer />
     </View>
