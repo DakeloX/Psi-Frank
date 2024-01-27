@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Platform, FlatList } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Keyboard } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import SelectFecha from '../components/SelectFecha';
@@ -8,38 +8,89 @@ import Footer from '../components/Footer';
 import Tabla from '../components/Tabla';
 
 const FormView = () => {
-
   const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
-  const [escolaridad, setEscolaridad] = useState(null);
-  const [conciencia, setConciencia] = useState(null);
-  const [curso, setCurso] = useState(null);
-  const [razonamiento, setRazonamiento] = useState(null);
-  const [ritmoLenguaje, setRitmoLenguaje] = useState(null);
-  const [juicio, setJuicio] = useState(null);
-  const [instrospeccion, setIntrospeccion] = useState(null);
-  const [prospeccion, setProspeccion] = useState(null);
   const [civilState, setCivilState] = useState(null);
+
+  const escolaridadRef = useRef();
+  const religionRef = useRef();
+  const viveconRef = useRef();
+  const telefonoRef = useRef();
+  const patologicosRef = useRef();
+  const farmacologicosRef = useRef();
+  const toxicosRef = useRef();
+  const quirurgicosRef = useRef();
+  const alergiasRef = useRef();
+  const ginecologicosRef = useRef();
+  const psiquiatricosRef = useRef();
+  const antfamiliaRef = useRef();
+  const laboratoriosRef = useRef();
+  const consultaRef = useRef();
+  const enfactualRef = useRef();
 
   const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
   const [parentescoAcompañante, setParentescoAcompañante] = useState('');
 
-  const [isChecked, setChecked] = useState(false);
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
   const [isChecked3, setChecked3] = useState(false);
   const [isChecked4, setChecked4] = useState(false);
   const [isChecked5, setChecked5] = useState(false);
   const [isChecked6, setChecked6] = useState(false);
+  const [isChecked7, setChecked7] = useState(false);
+  const [isChecked8, setChecked8] = useState(false);
   const [isCheckedPatologia, setCheckedPatologia] = useState(false);
   const [isCheckedFarmaco, setCheckedFarmaco] = useState(false);
   const [isCheckedQuirur, setCheckedQuirur] = useState(false);
   const [isCheckedToxicos, setCheckedToxicos] = useState(false);
   const [isCheckedAlergias, setCheckedAlergias] = useState(false);
   const [isCheckedGinec, setCheckedGinec] = useState(false);
+  const [isCheckedGinecAp, setCheckedGinecAp] = useState(false);
   const [isCheckedPsiq, setCheckedPsiq] = useState(false);
   const [isCheckedPsiqFamilia, setCheckedPsiqFamilia] = useState(false);
+
+  const handleCheckGinecAp = () => {
+    setCheckedGinecAp((prev) => !prev);
+    setCheckedGinec(false);
+  };
+
+  const handleCheckGinec = () => {
+    setCheckedGinec((prev) => !prev);
+    setCheckedGinecAp(false);
+  };
+
+  const handleCampoSubmit = (nextFieldRef) => {
+    return () => {
+      // Puedes realizar acciones adicionales si es necesario
+
+      if (nextFieldRef) {
+        nextFieldRef.current.focus(); // Mover el foco al siguiente campo
+      } else {
+        // Si no hay siguiente campo, puedes manejar el evento final aquí
+      }
+    };
+  };
+
+  const handleCheck1 = () => {
+    setChecked1(true);
+    setChecked2(false);
+  };
+  
+  const handleCheck2 = () => {
+    setChecked2(true);
+    setChecked1(false);
+  };
+
+  const handleCheck3 = () => {
+    setChecked3(true);
+    setChecked4(false);
+  };
+
+  const handleCheck4 = () => {
+    setChecked4(true);
+    setChecked3(false);
+  };
 
   const handleCheck5 = () => {
     setChecked5(true);
@@ -47,8 +98,18 @@ const FormView = () => {
   };
 
   const handleCheck6 = () => {
-    setChecked5(false);
     setChecked6(true);
+    setChecked5(false);
+  };
+
+  const handleCheck7 = () => {
+    setChecked7(true);
+    setChecked8(false);
+  };
+
+  const handleCheck8 = () => {
+    setChecked8(true);
+    setChecked7(false);
   };
 
   const [tableContainerHeight, setTableContainerHeight] = useState(300); // Altura inicial del contenedor externo
@@ -132,31 +193,37 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Ocupación:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la ocupación" />
+          <TextInput 
+            style={styles.input} 
+            placeholder="Ingresa la ocupación" 
+            onSubmitEditing={handleCampoSubmit(escolaridadRef)}
+            blurOnSubmit={false}
+          />
 
           <Text style={styles.label}>Escolaridad:</Text>
-
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona el nivel', value: null }}
-              onValueChange={(value) => setEscolaridad(value)}
-              items={[
-                { label: 'No aplica', value: 'No aplica' },
-                { label: 'Preescolar', value: 'Preescolar' },
-                { label: 'Educación Basica', value: 'EduBasica' },
-                { label: 'Educación Media', value: 'EduMedia' },
-                { label: 'Educaión superior', value: 'EduSuperior' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
+          <TextInput 
+            style={styles.input} 
+            ref={escolaridadRef}
+            placeholder="Ingresa la escolaridad" 
+            onSubmitEditing={handleCampoSubmit(religionRef)}
+            blurOnSubmit={false}
+          />
 
           <Text style={styles.label}>Religión:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa la religión" />
+          <TextInput 
+            style={styles.input}
+            ref={religionRef} 
+            placeholder="Ingresa la religión" 
+            onSubmitEditing={handleCampoSubmit(viveconRef)}
+            blurOnSubmit={false}
+          />
 
           <Text style={styles.label}>Con quién vive:</Text>
-          <TextInput style={styles.input} placeholder="Con quien vive el paciente" />
+          <TextInput 
+            style={styles.input} 
+            ref={viveconRef}
+            placeholder="Con quien vive el paciente" 
+          />
 
           <Text style={styles.label}>Acompañante:</Text>
           <View style={styles.idnContainer}>
@@ -174,6 +241,9 @@ const FormView = () => {
               editable={isCheckedAcompañante}  // Aquí se condiciona la propiedad editable
               value={parentescoAcompañante}
               onChangeText={(text) => setParentescoAcompañante(text)}
+              onSubmitEditing={handleCampoSubmit(telefonoRef)}
+
+              blurOnSubmit={false}
             />
           </View>
         </View>
@@ -182,7 +252,14 @@ const FormView = () => {
         <View style={styles.formSection}>
           <Text style={styles.sectionTitleMiddle}>Información de Contacto</Text>
           <Text style={styles.label}>Teléfono:</Text>
-          <TextInput style={styles.input} placeholder="Ingresa el teléfono" keyboardType="phone-pad" />
+          <TextInput 
+            style={styles.input}
+            ref={telefonoRef} 
+            placeholder="Ingresa el teléfono" 
+            keyboardType="phone-pad"
+            onSubmitEditing={handleCampoSubmit(patologicosRef)}
+            blurOnSubmit={false}
+          />
           {/* Otros campos de información de contacto */}
         </View>
         {/* Antecedentes */}
@@ -204,10 +281,12 @@ const FormView = () => {
               />
             </View>
           </View>
-
           <TextInput style={styles.input}
+            ref={patologicosRef}
             placeholder=">"
             editable={!isCheckedPatologia}
+            onSubmitEditing={handleCampoSubmit(farmacologicosRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
@@ -226,8 +305,11 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={farmacologicosRef}
             placeholder=">"
             editable={!isCheckedFarmaco}
+            onSubmitEditing={handleCampoSubmit(toxicosRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
@@ -246,8 +328,11 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={toxicosRef}
             placeholder=">"
             editable={!isCheckedToxicos}
+            onSubmitEditing={handleCampoSubmit(quirurgicosRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
@@ -266,8 +351,11 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={quirurgicosRef}
             placeholder=">"
             editable={!isCheckedQuirur}
+            onSubmitEditing={handleCampoSubmit(alergiasRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
@@ -286,17 +374,30 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={alergiasRef}
             placeholder=">"
             editable={!isCheckedAlergias}
+            onSubmitEditing={handleCampoSubmit(ginecologicosRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Ginecológicos:</Text>
             <View style={styles.checkBoxSpace}>
               <CheckBox
+                title='No aplica'
+                checked={isCheckedGinecAp}
+                onPress={handleCheckGinecAp}
+                containerStyle={{
+                  //marginRight: -320,
+                  borderRadius: 8,
+                  height: 45,
+                }}
+              />
+              <CheckBox
                 title='Niega'
                 checked={isCheckedGinec}
-                onPress={() => setCheckedGinec(!isCheckedGinec)}
+                onPress={handleCheckGinec}
                 containerStyle={{
                   //marginRight: -320,
                   borderRadius: 8,
@@ -306,8 +407,11 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={ginecologicosRef}
             placeholder=">"
-            editable={!isCheckedGinec}
+            editable={!isCheckedGinec && !isCheckedGinecAp} // No editable si alguno de los dos está seleccionado
+            onSubmitEditing={handleCampoSubmit(psiquiatricosRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
@@ -326,13 +430,16 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.input}
+            ref={psiquiatricosRef}
             placeholder=">"
             editable={!isCheckedPsiq}
+            onSubmitEditing={handleCampoSubmit(antfamiliaRef)}
+            blurOnSubmit={false}
           />
 
           <View style={styles.checkBoxAntecedetes}>
-            <Text style={styles.labelAntecedentes}>Antecedentes {'\n'}Psiquiatricos de {'\n'}familia:</Text>
-            <View style={styles.checkBoxSpace}>
+            <Text style={[styles.labelAntecedentes, {marginBottom: 6}]}>Antecedentes {'\n'}Familiares:</Text>
+            <View style={[styles.checkBoxSpace, {marginTop: 6}]}>
               <CheckBox
                 title='Niega'
                 checked={isCheckedPsiqFamilia}
@@ -346,221 +453,116 @@ const FormView = () => {
             </View>
           </View>
           <TextInput style={styles.doubleInput}
+            ref={antfamiliaRef}
             placeholder=">"
             editable={!isCheckedPsiqFamilia}
             multiline={true}
+            onKeyPress={({ nativeEvent }) => {
+              if (nativeEvent.key === 'Enter') {
+                antfamiliaRef.current.blur(); // Finalizar la edición
+              }
+            }}
+            onSubmitEditing={handleCampoSubmit(laboratoriosRef)}
+            blurOnSubmit={false}
           />
 
           <Text style={styles.label}>Examenes Laboratorios:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
+          <TextInput 
+            style={styles.doubleInput}
+            ref={laboratoriosRef} 
+            placeholder=">" 
+            multiline={true}
+            onSubmitEditing={handleCampoSubmit(consultaRef)}
+            blurOnSubmit={false}
+          />
 
           <Text style={styles.label}>Motivo Consulta:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
+          <TextInput 
+            style={styles.doubleInput}
+            ref={consultaRef} 
+            placeholder=">" 
+            multiline={true}
+            onSubmitEditing={handleCampoSubmit(enfactualRef)}
+            blurOnSubmit={false}
+          />
 
           <Text style={styles.label}>Enfermedad Actual:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
+          <TextInput 
+            style={styles.doubleInput}
+            ref={enfactualRef} 
+            placeholder=">" 
+            multiline={true}
+          />
         </View>
 
         <View style={styles.formSection}>
-          <Text style={styles.sectionTitleMiddle}>Examen mental</Text>
 
-          <Text style={styles.label}>Prosopografía: </Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
+          <Text style={[styles.label, { marginTop: -8 }]}>Orietación: </Text>
 
-          <Text style={styles.label}>Orietación: </Text>
+          <Text style={styles.label2}>Autopsíquica: </Text>
           <View style={styles.checkBox}>
             <CheckBox
-              title='Autopsíquica'
+              title='Si'
               checked={isChecked1}
-              onPress={() => setChecked1(!isChecked1)}
+              onPress={handleCheck1}
             />
             <CheckBox
-              title='Alopsíquica'
+              title='No'
               checked={isChecked2}
-              onPress={() => setChecked2(!isChecked2)}
+              onPress={handleCheck2}
             />
           </View>
 
-          <Text style={styles.label}>Situación de: </Text>
+          <Text style={styles.label2}>Alopsíquica: </Text>
           <View style={styles.checkBox}>
             <CheckBox
-              title='Conciencia'
+              title='Si'
               checked={isChecked3}
-              onPress={() => setChecked3(!isChecked3)}
+              onPress={handleCheck3}
             />
             <CheckBox
-              title='Enfermedad'
+              title='No'
               checked={isChecked4}
-              onPress={() => setChecked4(!isChecked4)}
+              onPress={handleCheck4}
             />
           </View>
 
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona nivel de conciencia', value: null }}
-              onValueChange={(value) => setConciencia(value)}
-              items={[
-                { label: 'Alerta', value: 'Alerta' },
-                { label: 'Hipolucido', value: 'Hipolucido' },
-                { label: 'Somnolencia', value: 'Somnolencia' },
-                { label: 'Obnubilado', value: 'Obnubilado' },
-                { label: 'Coma', value: 'Coma' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
+          <Text style={styles.label}>Conciencia: </Text>
 
-          <Text style={styles.label}>Atención:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.label}>Sensopercepción:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.highLabel}>Ideación o Pensamiento:</Text>
-          <Text style={styles.label}>Curso:</Text>
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona curso', value: null }}
-              onValueChange={(value) => setCurso(value)}
-              items={[
-                { label: 'Acelerado', value: 'Acelerado' },
-                { label: 'Retardado', value: 'Retardado' },
-                { label: 'Prolijo', value: 'Prolijo' },
-                { label: 'Estereotipado', value: 'Estereotipado' },
-                { label: 'ecolalia', value: 'ecolalia' },
-                { label: 'interceptado', value: 'interceptado' },
-                { label: 'disgregado', value: 'disgregado' },
-                { label: 'coherente', value: 'coherente' },
-                { label: 'Incoherente', value: 'Incoherente' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
-
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-          <Text style={styles.label}>Razonamiento:</Text>
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona tipo de razonamiento', value: null }}
-              onValueChange={(value) => setRazonamiento(value)}
-              items={[
-                { label: 'Lógico', value: 'Lógico' },
-                { label: 'Ilógico', value: 'Ilógico' },
-                { label: 'Analógico', value: 'Analógico' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
-
-          <Text style={styles.label}>Memoria:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.highLabel}>Lenguaje:</Text>
-          <Text style={styles.label}>Ritmo:</Text>
-
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona el ritmo', value: null }}
-              onValueChange={(value) => setRitmoLenguaje(value)}
-              items={[
-                { label: 'Normal', value: 'Normal' },
-                { label: 'Acelerado', value: 'Acelerado' },
-                { label: 'Retardado', value: 'Retardado' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
-
+          <Text style={styles.label2}>De Situación: </Text>
           <View style={styles.checkBox}>
             <CheckBox
-              title='Coherente'
+              title='Si'
               checked={isChecked5}
               onPress={handleCheck5}
             />
             <CheckBox
-              title='Incoherente'
+              title='No'
               checked={isChecked6}
               onPress={handleCheck6}
             />
           </View>
 
+          <Text style={styles.label2}>De Enfermedad: </Text>
           <View style={styles.checkBox}>
             <CheckBox
-              title={'Uso de Muletillas'}
-              checked={isChecked}
-              onPress={() => setChecked(!isChecked)}
+              title='Si'
+              checked={isChecked7}
+              onPress={handleCheck7}
+            />
+            <CheckBox
+              title='No'
+              checked={isChecked8}
+              onPress={handleCheck8}
             />
           </View>
-
-          <Text style={styles.label}>Estado de ánimo:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.label}>Sueño:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.label}>Orexia:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.label}>Juicio:</Text>
-
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona juicio', value: null }}
-              onValueChange={(value) => setJuicio(value)}
-              items={[
-                { label: 'Normal', value: 'Normal' },
-                { label: 'Desviado ', value: 'Desviado ' },
-                { label: 'Deficiente ', value: 'Deficiente ' },
-                { label: 'Debilitado', value: 'Debilitado' },
-                { label: 'Suspendido', value: 'Suspendido' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
-
-          <Text style={styles.label}>Conducta:</Text>
-          <TextInput style={styles.doubleInput} placeholder=">" multiline={true} />
-
-          <Text style={styles.label}>Introspección:</Text>
-
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona introspección', value: null }}
-              onValueChange={(value) => setIntrospeccion(value)}
-              items={[
-                { label: 'Pobre', value: 'Pobre' },
-                { label: 'Nula', value: 'Nula' },
-                { label: 'Conservada', value: 'Conservada' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
-
-          <Text style={styles.label}>Prospección:</Text>
-          <View style={styles.pickerContainer}>
-            <RNPickerSelect
-              placeholder={{ label: 'Selecciona prospección', value: null }}
-              onValueChange={(value) => setProspeccion(value)}
-              items={[
-                { label: 'Pobre', value: 'Pobre' },
-                { label: 'Nula', value: 'Nula' },
-                { label: 'Conservada', value: 'Conservada' },
-              ]}
-              style={pickerSelectStyles}
-              useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
-            />
-          </View>
+          
+          <Text style={[styles.highLabel, {marginTop: 10}]}>Examen mental: </Text>
+          <TextInput style={styles.doubleInputEA} placeholder="Prosopografía, Atención, Sensopercepción, Ideación, Pensamiento, Curso, Afectividad, Razonamiento, Memoria, Lenguaje, Ritmo, Ánimo, Sueño, Orexia, Juicio, Conducta, Introspección, Prospección" multiline={true} />
 
           <Text style={styles.highLabel}>Análisis:</Text>
           <TextInput style={styles.tripleInput} placeholder=">" multiline={true} />
         </View>
-
 
         <View style = {styles.tableContainer}>
   
@@ -624,6 +626,13 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
+  label2: {
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 8,
+    alignSelf: 'center',
+  },
+
   highLabel: {
     color: '#fff',
     fontSize: 20,
@@ -645,6 +654,17 @@ const styles = StyleSheet.create({
   doubleInput: {
     backgroundColor: '#fff',
     height: 80,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    width: 350,
+    //maxWidth: 500,
+  },
+
+  doubleInputEA: {
+    backgroundColor: '#fff',
+    height: 180,
     borderRadius: 8,
     paddingHorizontal: 16,
     marginTop: 8,
@@ -713,7 +733,7 @@ const styles = StyleSheet.create({
     padding: 16,
     borderRadius: 8,
     alignItems: 'center',
-    marginBottom: 74,
+    marginBottom: 64,
     marginTop: 10,
   },
 
@@ -731,11 +751,11 @@ const styles = StyleSheet.create({
   },
 
   checkBoxSpace: {
-    flexDirection: 'row',
+    flexDirection: 'column',
     //width: '100%',
     //alignSelf: 'center',
     justifyContent: 'flex-start',
-    flex: 0.5,
+    flex: 0.43,
   },
   checkBoxContainer: {
     backgroundColor: '#fff',

@@ -100,7 +100,7 @@ const styles = StyleSheet.create({
     color: 'white',
     textDecorationLine: 'underline',
     marginTop: 16,
-    marginBottom: 64,
+    marginBottom: 16,
     alignSelf: 'center',
     fontSize: 16,
   },

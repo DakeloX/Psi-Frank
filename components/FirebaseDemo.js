@@ -1,12 +1,12 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
-import { ref, set, get } from 'firebase/database';
+import { ref, set, onValue } from 'firebase/database';
 import { database } from '../firebase';
 
 const FirebaseDemo = () => {
     const escribirDatos = async () => {
         try {
-            await set(ref(database, 'ejamplo'), {
+            await set(ref(database, 'ejemplo'), {
             mensaje: 'Hola, Firebase!',
             });
         } catch (error) {
@@ -15,13 +15,12 @@ const FirebaseDemo = () => {
     };
 
     const leerDatos = async () => {
-        try {
-            const snapshot = await get(ref(database, 'ejamplo'));
+        onValue(ref(database, 'ejemplo'), (snapshot) => {
             const datos = snapshot.val();
             console.log('Datos leídos:', datos);
-        } catch (error) {
+        }, (error) => {
             console.error('Error leyendo datos:', error);
-        }
+        });
     };
 
     return (
