@@ -558,7 +558,11 @@ const FormView = () => {
           </View>
           
           <Text style={[styles.highLabel, {marginTop: 10}]}>Examen mental: </Text>
-          <TextInput style={styles.doubleInputEA} placeholder="Prosopografía, Atención, Sensopercepción, Ideación, Pensamiento, Curso, Afectividad, Razonamiento, Memoria, Lenguaje, Ritmo, Ánimo, Sueño, Orexia, Juicio, Conducta, Introspección, Prospección" multiline={true} />
+          <Text style ={styles.examenLabel}>Prosopografía, Atención, Sensopercepción,
+             Ideación, Pensamiento, Curso, Afectividad, 
+             Razonamiento, Memoria, Lenguaje, Ánimo, Sueño, 
+             Orexia, Juicio, Conducta, Introspección, Prospección</Text>
+          <TextInput style={styles.doubleInputEA} placeholder=">" multiline={true} />
 
           <Text style={styles.highLabel}>Análisis:</Text>
           <TextInput style={styles.tripleInput} placeholder=">" multiline={true} />
@@ -624,6 +628,19 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 18,
     marginTop: 8,
+  },
+
+  examenLabel:{
+    color: '#fff',
+    fontSize: 14,
+    marginTop: 8,
+    width: 350,
+    borderColor: '#fff',
+    borderWidth: 0.5,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 5,
+    
   },
 
   label2: {

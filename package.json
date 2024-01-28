@@ -24,6 +24,7 @@
     "react-datepicker": "^4.25.0",
     "react-dom": "18.2.0",
     "react-native": "0.72.6",
+    "react-native-datatable": "^0.0.8",
     "react-native-dropdown-picker": "^5.4.6",
     "react-native-elements": "^3.4.3",
     "react-native-modal-datetime-picker": "^17.1.0",
@@ -34,6 +35,7 @@
     "react-native-screens": "~3.22.0",
     "react-native-stack": "^1.0.0-alpha11",
     "react-native-table-component": "^1.2.2",
+    "react-native-tableview-simple": "^4.4.0",
     "react-native-web": "~0.19.6",
     "react-responsive": "^9.0.2"
   },

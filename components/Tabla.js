@@ -1,16 +1,11 @@
 import React, { useState } from 'react';
-import { View, TextInput, TouchableOpacity, StyleSheet, Text, ScrollView } from 'react-native';
-import { Table, Row } from 'react-native-table-component';
+import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 'react-native';
 
 const TablaComponent = ({ onTableHeightChange }) => {
   const [tabla, setTabla] = useState([
     ['Medicamento', '8AM', '12PM', '4PM', '9PM'],
-    Array(5).fill(''),
+    Array(5).fill(''), // Inicializar con 5 columnas para los inputs
   ]);
-
-  const [tableHeight, setTableHeight] = useState(0);
-  const [editedRowIndex, setEditedRowIndex] = useState(null);
-  const [editedColumnIndex, setEditedColumnIndex] = useState(null);
 
   const agregarFila = () => {
     setTabla([...tabla, Array(tabla[0].length).fill('')]);
@@ -22,72 +17,39 @@ const TablaComponent = ({ onTableHeightChange }) => {
     }
   };
 
-  const comenzarEdicion = (fila, columna) => {
-    setEditedRowIndex(fila);
-    setEditedColumnIndex(columna);
-  };
-
-  const finalizarEdicion = () => {
-    setEditedRowIndex(null);
-    setEditedColumnIndex(null);
-  };
-
-  const handleInputChange = (text) => {
+  const handleInputChange = (text, rowIndex, columnIndex) => {
     const nuevaTabla = [...tabla];
-    nuevaTabla[editedRowIndex][editedColumnIndex] = text;
+    nuevaTabla[rowIndex][columnIndex] = text;
     setTabla(nuevaTabla);
   };
 
-  const renderFila = (rowData, rowIndex) => (
-    <Row
-      data={rowData.map((cellData, cellIndex) => (
-        <View key={cellIndex} style={[styles.celda, { backgroundColor: rowIndex % 2 === 1 ? '#e0e0e0' : '#f5f5f5' }]}>
-          {rowIndex === 0 ? (
-            <Text style={{ ...styles.celdaTexto }}>{cellData}</Text>
-          ) : (
-            <View style={styles.inputWrapper}>
-              <TouchableOpacity
-                onPress={() => comenzarEdicion(rowIndex, cellIndex)}
-                style={styles.inputContainer}
-              >
-                {editedRowIndex === rowIndex && editedColumnIndex === cellIndex ? (
-                  <TextInput
-                    style={styles.input}
-                    value={tabla[rowIndex][cellIndex]}
-                    onChangeText={handleInputChange}
-                    onBlur={finalizarEdicion}
-                    autoFocus
-                    multiline={true}
-                  />
-                ) : (
-                  <Text style={{ ...styles.celdaTexto }}>{cellData}</Text>
-                )}
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
-      ))}
-      key={rowIndex}
-      style={styles.fila}
-      textStyle={{ ...styles.celdaTexto }}
-      widthArr={[150, 150, 150, 150, 150]}
-    />
-  );
-
-  const onLayout = (event) => {
-    const { height } = event.nativeEvent.layout;
-    setTableHeight(height);
-    onTableHeightChange && onTableHeightChange(height);
-  };
-
   return (
-    <ScrollView onLayout={onLayout} style={styles.contenedor}>
-      <ScrollView horizontal={true} style={styles.scrollContainer}>
-        <View>
-          <Table borderStyle={{ borderColor: '#bbb' }}>
-            {tabla.map((rowData, rowIndex) => renderFila(rowData, rowIndex))}
-          </Table>
-        </View>
+    <View style={styles.contenedor}>
+      <ScrollView horizontal={true} style={styles.tablaContainer}>
+        <ScrollView onLayout={onTableHeightChange} horizontal={true}>
+          <View style={styles.tabla}>
+            {tabla.map((rowData, rowIndex) => (
+              <View key={rowIndex} style={styles.fila}>
+                {rowData.map((cellData, cellIndex) => (
+                  <View key={cellIndex} style={styles.celda}>
+                    {rowIndex === 0 ? (
+                      <Text style={styles.celdaTexto}>{cellData}</Text>
+                    ) : (
+                      <TextInput
+                        style={styles.input}
+                        value={tabla[rowIndex][cellIndex]}
+                        onChangeText={(text) => handleInputChange(text, rowIndex, cellIndex)}
+                        multiline={true}
+                        numberOfLines={4} // Límite de 4 líneas
+                        placeholder=""
+                      />
+                    )}
+                  </View>
+                ))}
+              </View>
+            ))}
+          </View>
+        </ScrollView>
       </ScrollView>
 
       <View style={styles.botonesContenedor}>
@@ -99,7 +61,7 @@ const TablaComponent = ({ onTableHeightChange }) => {
           <Text>Quitar Fila</Text>
         </TouchableOpacity>
       </View>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -107,8 +69,12 @@ const styles = StyleSheet.create({
   contenedor: {
     flex: 1,
   },
-  scrollContainer: {
-    width: 350, // Ancho fijo de 350 píxeles
+  tablaContainer: {
+    flex: 1,
+  },
+  tabla: {
+    flexDirection: 'column',
+    backgroundColor: 'white', // Fondo blanco para la tabla
   },
   fila: {
     flexDirection: 'row',
@@ -120,27 +86,16 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
     borderWidth: 0.3, // Quita el borde
   },
   celdaTexto: {
     textAlign: 'center',
     fontWeight: 'bold',
-  },
-  inputWrapper: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: 150, // Ajusta el ancho según sea necesario
-
-  },
-  inputContainer: {
-    flex: 1,
-    width: '100%', // Ocupa todo el ancho del contenedor
+    width: 150,
   },
   input: {
     textAlign: 'center',
-    width: '100%', // Ocupa todo el ancho del contenedor
+    width: 150,
     height: '100%',
   },
   botonesContenedor: {
