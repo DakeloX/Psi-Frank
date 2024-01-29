@@ -28,6 +28,7 @@ const FormView = () => {
   const laboratoriosRef = useRef();
   const consultaRef = useRef();
   const enfactualRef = useRef();
+  const analisisRef = useRef();
 
   const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
   const [parentescoAcompañante, setParentescoAcompañante] = useState('');
@@ -197,6 +198,7 @@ const FormView = () => {
             style={styles.input} 
             placeholder="Ingresa la ocupación" 
             onSubmitEditing={handleCampoSubmit(escolaridadRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -206,6 +208,7 @@ const FormView = () => {
             ref={escolaridadRef}
             placeholder="Ingresa la escolaridad" 
             onSubmitEditing={handleCampoSubmit(religionRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -215,6 +218,7 @@ const FormView = () => {
             ref={religionRef} 
             placeholder="Ingresa la religión" 
             onSubmitEditing={handleCampoSubmit(viveconRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -242,7 +246,7 @@ const FormView = () => {
               value={parentescoAcompañante}
               onChangeText={(text) => setParentescoAcompañante(text)}
               onSubmitEditing={handleCampoSubmit(telefonoRef)}
-
+              returnKeyType='next'
               blurOnSubmit={false}
             />
           </View>
@@ -258,6 +262,7 @@ const FormView = () => {
             placeholder="Ingresa el teléfono" 
             keyboardType="phone-pad"
             onSubmitEditing={handleCampoSubmit(patologicosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
           {/* Otros campos de información de contacto */}
@@ -286,6 +291,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedPatologia}
             onSubmitEditing={handleCampoSubmit(farmacologicosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -309,6 +315,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedFarmaco}
             onSubmitEditing={handleCampoSubmit(toxicosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -332,6 +339,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedToxicos}
             onSubmitEditing={handleCampoSubmit(quirurgicosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -355,6 +363,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedQuirur}
             onSubmitEditing={handleCampoSubmit(alergiasRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -378,6 +387,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedAlergias}
             onSubmitEditing={handleCampoSubmit(ginecologicosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -411,6 +421,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedGinec && !isCheckedGinecAp} // No editable si alguno de los dos está seleccionado
             onSubmitEditing={handleCampoSubmit(psiquiatricosRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -434,6 +445,7 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedPsiq}
             onSubmitEditing={handleCampoSubmit(antfamiliaRef)}
+            returnKeyType='next'
             blurOnSubmit={false}
           />
 
@@ -457,13 +469,13 @@ const FormView = () => {
             placeholder=">"
             editable={!isCheckedPsiqFamilia}
             multiline={true}
-            onKeyPress={({ nativeEvent }) => {
-              if (nativeEvent.key === 'Enter') {
-                antfamiliaRef.current.blur(); // Finalizar la edición
-              }
+            onSubmitEditing={() => {
+              antfamiliaRef.current.blur();
+              // Handle the transition to the next field
+              laboratoriosRef.current.focus(); // Adjust this based on your needs
             }}
-            onSubmitEditing={handleCampoSubmit(laboratoriosRef)}
-            blurOnSubmit={false}
+            returnKeyType='next'
+            blurOnSubmit={true}
           />
 
           <Text style={styles.label}>Examenes Laboratorios:</Text>
@@ -472,8 +484,13 @@ const FormView = () => {
             ref={laboratoriosRef} 
             placeholder=">" 
             multiline={true}
-            onSubmitEditing={handleCampoSubmit(consultaRef)}
-            blurOnSubmit={false}
+            onSubmitEditing={() => {
+              laboratoriosRef.current.blur();
+              // Handle the transition to the next field
+              consultaRef.current.focus(); // Adjust this based on your needs
+            }}
+            returnKeyType='next'
+            blurOnSubmit={true}
           />
 
           <Text style={styles.label}>Motivo Consulta:</Text>
@@ -482,20 +499,30 @@ const FormView = () => {
             ref={consultaRef} 
             placeholder=">" 
             multiline={true}
-            onSubmitEditing={handleCampoSubmit(enfactualRef)}
-            blurOnSubmit={false}
+            onSubmitEditing={() => {
+              consultaRef.current.blur();
+              // Handle the transition to the next field
+              enfactualRef.current.focus(); // Adjust this based on your needs
+            }}
+            returnKeyType='next'
+            blurOnSubmit={true}
           />
 
           <Text style={styles.label}>Enfermedad Actual:</Text>
           <TextInput 
-            style={styles.doubleInput}
+            style={styles.tripleInput}
             ref={enfactualRef} 
             placeholder=">" 
             multiline={true}
+            onSubmitEditing={() => {
+              enfactualRef.current.blur();
+            }}
+            returnKeyType='next'
+            blurOnSubmit={true}
           />
         </View>
 
-        <View style={styles.formSection}>
+        <View style={[styles.formSection, {marginBottom: 0}]}>
 
           <Text style={[styles.label, { marginTop: -8 }]}>Orietación: </Text>
 
@@ -557,23 +584,93 @@ const FormView = () => {
             />
           </View>
           
-          <Text style={[styles.highLabel, {marginTop: 10}]}>Examen mental: </Text>
-          <Text style ={styles.examenLabel}>Prosopografía, Atención, Sensopercepción,
-             Ideación, Pensamiento, Curso, Afectividad, 
-             Razonamiento, Memoria, Lenguaje, Ánimo, Sueño, 
-             Orexia, Juicio, Conducta, Introspección, Prospección</Text>
-          <TextInput style={styles.doubleInputEA} placeholder=">" multiline={true} />
+          <Text style={[styles.highLabel, {marginTop: 10}]}>Examen Mental: </Text>
+          <Text style ={styles.examenLabel}>Prosopografía, Atención, 
+            Sensopercepción, Ideación, Pensamiento, Curso, Afectividad, 
+            Razonamiento, Memoria, Lenguaje, Ánimo, Sueño, Orexia,
+            Juicio, Conducta, Introspección, Prospección</Text>
+          <TextInput 
+            style={styles.doubleInputEA}
+            placeholder=">" 
+            multiline={true} 
+            onSubmitEditing={() => {
+              current.blur();
+              analisisRef.current.focus();
+            }}
+            returnKeyType='next'
+            blurOnSubmit={true}
+          />
 
           <Text style={styles.highLabel}>Análisis:</Text>
-          <TextInput style={styles.tripleInput} placeholder=">" multiline={true} />
-        </View>
+          <TextInput 
+            style={styles.tripleInput} 
+            ref={analisisRef}
+            placeholder=">" 
+            multiline={true} 
+            onSubmitEditing={() => {
+              current.blur();
+              analisisRef.current.focus();
+            }}
+            returnKeyType='next'
+            blurOnSubmit={true}
+          />
+          
+          <Text style={styles.highLabelB}>Impresión Diagnostica:</Text>
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>1.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
 
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>2.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>3.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>4.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <Text style={styles.highLabelB}>Plan:</Text>
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>1.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>2.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>3.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+        </View>
+        
         <View style = {styles.tableContainer}>
-  
+            <Text style={[styles.highLabel, {marginBottom: 8}]}>Tratamiento:</Text>
             <Tabla onTableHeightChange={handleTableHeightChange}/>
-
         </View>
-
         {/* Botón de Guardar */}
         <TouchableOpacity style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Guardar</Text>
@@ -630,10 +727,18 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
 
+  label2: {
+    color: '#fff',
+    fontSize: 18,
+    marginTop: 8,
+    alignSelf: 'center',
+  },
+
   examenLabel:{
     color: '#fff',
     fontSize: 14,
-    marginTop: 8,
+    marginTop: 4,
+    marginBottom: 4, 
     width: 350,
     borderColor: '#fff',
     borderWidth: 0.5,
@@ -643,18 +748,18 @@ const styles = StyleSheet.create({
     
   },
 
-  label2: {
-    color: '#fff',
-    fontSize: 18,
-    marginTop: 8,
-    alignSelf: 'center',
-  },
-
   highLabel: {
     color: '#fff',
     fontSize: 20,
     marginTop: 8,
     fontWeight: 'bold',
+  },
+
+  highLabelB: {
+    color: '#fff',
+    fontSize: 20,
+    marginTop: 8,
+    marginBottom: 8,
   },
 
   input: {
@@ -666,6 +771,29 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     width: 350,
     //maxWidth: 500,
+  },
+
+  inputB: {
+    backgroundColor: '#fff',
+    height: 40,
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    marginTop: 8,
+    marginBottom: 8,
+    width: 326,
+    //maxWidth: 500,
+  },
+
+  prefix: {
+    color: '#fff',
+    fontSize: 20,
+    marginTop:  10,
+    marginRight: 5, // Puedes ajustar el espaciado según tus necesidades
+  },
+
+  numberList: {
+    flexDirection:'row', 
+    justifyContent:'space-between'
   },
 
   doubleInput: {
@@ -692,7 +820,7 @@ const styles = StyleSheet.create({
 
   tripleInput: {
     backgroundColor: '#fff',
-    height: 100,
+    height: 120,
     borderRadius: 8,
     paddingHorizontal: 16,
     marginTop: 8,

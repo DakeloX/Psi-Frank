@@ -3,7 +3,7 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet, ScrollView } from 
 
 const TablaComponent = ({ onTableHeightChange }) => {
   const [tabla, setTabla] = useState([
-    ['Medicamento', '8AM', '12PM', '4PM', '9PM'],
+    ['Hora', '8AM', '12PM', '4PM', '9PM'],
     Array(5).fill(''), // Inicializar con 5 columnas para los inputs
   ]);
 
