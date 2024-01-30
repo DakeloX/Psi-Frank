@@ -1,8 +1,7 @@
 import React, { useState, useRef } from 'react';
-import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet, Keyboard } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
-import CamposDinamicos from '../components/CamposDinamicos';
 import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
@@ -271,6 +270,7 @@ const FormView = () => {
         {/* Antecedentes */}
         <View style={styles.formSection}>
           <Text style={styles.sectionTitleMiddle}>Antecedentes</Text>
+
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Patológicos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -522,76 +522,69 @@ const FormView = () => {
           />
         </View>
 
-        <View style={[styles.formSection, {marginBottom: 0}, {width: 360}]}>
+        <View style={[styles.formSection, {marginBottom: 0}]}>
 
-          <Text style={[styles.labelTop, { marginTop: -8 }]}>Orientación:</Text>
+          <Text style={[styles.label, { marginTop: -8 }]}>Orietación: </Text>
 
-          <View style={styles.numberList}>
-            <Text style={styles.label2}>Autopsíquica: </Text>
-            <View style={styles.checkBox}>
-              <CheckBox
-                title='Si'
-                checked={isChecked1}
-                onPress={handleCheck1}
-              />
-              <CheckBox
-                title='No'
-                checked={isChecked2}
-                onPress={handleCheck2}
-              />
-            </View>
-          </View>
-          
-          <View style={styles.numberList}>
-            <Text style={styles.label2}>Alopsíquica: </Text>
-            <View style={styles.checkBox}>
-              <CheckBox
-                title='Si'
-                checked={isChecked3}
-                onPress={handleCheck3}
-              />
-              <CheckBox
-                title='No'
-                checked={isChecked4}
-                onPress={handleCheck4}
-              />
-            </View>
+          <Text style={styles.label2}>Autopsíquica: </Text>
+          <View style={styles.checkBox}>
+            <CheckBox
+              title='Si'
+              checked={isChecked1}
+              onPress={handleCheck1}
+            />
+            <CheckBox
+              title='No'
+              checked={isChecked2}
+              onPress={handleCheck2}
+            />
           </View>
 
-          <Text style={styles.labelTop}>Conciencia:</Text>
-          <View  style={styles.numberList}>
-            <Text style={styles.label2}>De Situación: </Text>
-            <View style={styles.checkBox}>
-              <CheckBox
-                title='Si'
-                checked={isChecked5}
-                onPress={handleCheck5}
-              />
-              <CheckBox
-                title='No'
-                checked={isChecked6}
-                onPress={handleCheck6}
-              />
-            </View>
+          <Text style={styles.label2}>Alopsíquica: </Text>
+          <View style={styles.checkBox}>
+            <CheckBox
+              title='Si'
+              checked={isChecked3}
+              onPress={handleCheck3}
+            />
+            <CheckBox
+              title='No'
+              checked={isChecked4}
+              onPress={handleCheck4}
+            />
           </View>
 
-          <View  style={styles.numberList}>
+          <Text style={styles.label}>Conciencia: </Text>
+
+          <Text style={styles.label2}>De Situación: </Text>
+          <View style={styles.checkBox}>
+            <CheckBox
+              title='Si'
+              checked={isChecked5}
+              onPress={handleCheck5}
+            />
+            <CheckBox
+              title='No'
+              checked={isChecked6}
+              onPress={handleCheck6}
+            />
+          </View>
+
           <Text style={styles.label2}>De Enfermedad: </Text>
-            <View style={styles.checkBox}>
-              <CheckBox
-                title='Si'
-                checked={isChecked7}
-                onPress={handleCheck7}
-              />
-              <CheckBox
-                title='No'
-                checked={isChecked8}
-                onPress={handleCheck8}
-              />
-            </View>
+          <View style={styles.checkBox}>
+            <CheckBox
+              title='Si'
+              checked={isChecked7}
+              onPress={handleCheck7}
+            />
+            <CheckBox
+              title='No'
+              checked={isChecked8}
+              onPress={handleCheck8}
+            />
           </View>
           
-          <Text style={[styles.highLabel, {marginTop: 12}]}>Examen Mental:</Text>
+          <Text style={[styles.highLabel, {marginTop: 10}]}>Examen Mental: </Text>
           <Text style ={styles.examenLabel}>Prosopografía, Atención, 
             Sensopercepción, Ideación, Pensamiento, Curso, Afectividad, 
             Razonamiento, Memoria, Lenguaje, Ánimo, Sueño, Orexia,
@@ -623,35 +616,65 @@ const FormView = () => {
           />
           
           <Text style={styles.highLabelB}>Impresión Diagnostica:</Text>
-            <View style={{width: 360}}>
-              <CamposDinamicos/>
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>1.</Text>
             </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
 
-          <Text style={styles.label}>Plan de Manejo:</Text>
-            <TextInput 
-              style={styles.tripleInput}
-              placeholder=">" 
-              multiline={true}
-            />
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>2.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>3.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>4.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <Text style={styles.highLabelB}>Plan:</Text>
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>1.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>2.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
+
+          <View  style={styles.numberList}>
+            <View>
+              <Text style={styles.prefix}>3.</Text>
+            </View>
+            <TextInput style={styles.inputB} placeholder=">" />
+          </View>
         </View>
         
         <View style = {styles.tableContainer}>
             <Text style={[styles.highLabel, {marginBottom: 8}]}>Tratamiento:</Text>
             <Tabla onTableHeightChange={handleTableHeightChange}/>
         </View>
-
-        <View style={styles.formSection}>
-          <Text style={styles.label}>Recomendaciones:</Text>
-            <TextInput 
-              style={styles.tripleInput}
-              placeholder=">" 
-              multiline={true}
-            />
-        </View>
         {/* Botón de Guardar */}
         <TouchableOpacity style={styles.submitButton}>
           <Text style={styles.submitButtonText}>Guardar</Text>
-        </TouchableOpacity>        
+        </TouchableOpacity>
       </ScrollView>
       <Footer />
     </View>
@@ -711,25 +734,18 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 
-  labelTop: {
-    color: '#fff',
-    fontSize: 20,
-    marginTop: 8,
-    marginBottom: 8,
-    alignSelf: 'center',
-  },
-
   examenLabel:{
     color: '#fff',
     fontSize: 14,
-    marginTop: 8,
+    marginTop: 4,
     marginBottom: 4, 
-    width: 360,
+    width: 350,
     borderColor: '#fff',
     borderWidth: 0.5,
     borderRadius: 8,
     paddingHorizontal: 16,
     paddingVertical: 5,
+    
   },
 
   highLabel: {
@@ -753,7 +769,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    width: 360,
+    width: 350,
     //maxWidth: 500,
   },
 
@@ -787,7 +803,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    width: 360,
+    width: 350,
     //maxWidth: 500,
   },
 
@@ -798,7 +814,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    width: 360,
+    width: 350,
     //maxWidth: 500,
   },
 
@@ -809,7 +825,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16,
     marginTop: 8,
     marginBottom: 8,
-    width: 360,
+    width: 350,
     //maxWidth: 500,
   },
 
@@ -821,7 +837,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     paddingHorizontal: 16,
     paddingTop: 5,
-    width: 360,
+    width: 350,
     //maxWidth: 500,
   },
 
@@ -874,7 +890,7 @@ const styles = StyleSheet.create({
 
   checkBox: {
     flexDirection: 'row',
-    width: 100,
+    //width: '100%',
     alignSelf: 'center',
     justifyContent: 'flex-end',
   },
@@ -896,7 +912,7 @@ const styles = StyleSheet.create({
   },
   checkBoxAntecedetes: {
     flexDirection: 'row',
-    width: 360,
+    width: 350,
   },
   labelAntecedentes: {
     color: '#fff',
@@ -905,7 +921,7 @@ const styles = StyleSheet.create({
     flex: 0.5,
   },
   tableContainer: {
-    width: 360,
+    width: 350,
   },
 });
 

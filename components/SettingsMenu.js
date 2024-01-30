@@ -2,10 +2,11 @@ import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { useAuth } from '../App'; // Ajusta la ruta según la ubicación real de App.js
 
-const SettingsMenu = () => {
+const SettingsMenu = ({ onCloseSession }) => {
   const { logout } = useAuth();
 
   const handleLogout = () => {
+    onCloseSession();
     logout();
   };
 
@@ -21,14 +22,15 @@ const SettingsMenu = () => {
 const styles = StyleSheet.create({
   menuContainer: {
     backgroundColor: '#fff',
-    position: 'absolute',
+    position: 'absolute',  // Mantén la posición absoluta para el contenedor principal
     top: 80,
     right: 10,
-    padding: 10,
+    padding: 5,
     borderRadius: 10,
-    elevation: 5,
+
   },
   menuItem: {
+   
     padding: 10,
   },
 });
