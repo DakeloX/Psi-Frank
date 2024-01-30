@@ -82,8 +82,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-    elevation: 0,
-    zIndex: 1,
+
   },
 
   formContainer: {
@@ -91,7 +90,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    zIndex: 0,
   },
 
   title: {

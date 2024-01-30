@@ -1,30 +1,18 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
 import SettingsMenu from './SettingsMenu';
 
 const Header = ({ logo, title }) => {
-  const navigation = useNavigation();
-  const [isMenuVisible, setMenuVisible] = useState(false);
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  const handleBackButton = () => {
-    navigation.goBack();
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSettings = () => {
-    setMenuVisible(!isMenuVisible);
-  };
-
-  const handleLogout = () => {
-    setMenuVisible(false);
-    setIsAuthenticated(false);
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleBackButton} style={styles.leftContainer}>
+      <TouchableOpacity onPress={() => console.log('Back button pressed')} style={styles.leftContainer}>
         <AntDesign name="arrowleft" size={30} color="#fff" />
       </TouchableOpacity>
       <View style={styles.centerContainer}>
@@ -32,9 +20,9 @@ const Header = ({ logo, title }) => {
         <Text style={styles.title}>{title}</Text>
       </View>
       <TouchableOpacity onPress={handleSettings} style={styles.rightContainer}>
-        <AntDesign name="setting" size={30} color="#fff" />
+        <AntDesign name={isMenuOpen ? 'close' : 'setting'} size={30} color="#fff" />
       </TouchableOpacity>
-      {isMenuVisible && <SettingsMenu onCloseSession={handleLogout} />}
+      {isMenuOpen && <SettingsMenu onCloseSession={() => setIsMenuOpen(false)} />}
     </View>
   );
 };
@@ -50,6 +38,7 @@ const styles = StyleSheet.create({
     marginTop: 40,
     paddingHorizontal: 10,
     width: '100%',
+    zIndex: 10,
   },
   leftContainer: {
     padding: 10,
