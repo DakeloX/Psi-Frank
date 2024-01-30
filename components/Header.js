@@ -1,17 +1,25 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import SettingsMenu from './SettingsMenu';
 
 const Header = ({ logo, title }) => {
   const navigation = useNavigation();
+  const [isMenuVisible, setMenuVisible] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   const handleBackButton = () => {
     navigation.goBack();
   };
 
   const handleSettings = () => {
-    console.log('Configuracion clickeado');
+    setMenuVisible(!isMenuVisible);
+  };
+
+  const handleLogout = () => {
+    setMenuVisible(false);
+    setIsAuthenticated(false);
   };
 
   return (
@@ -26,6 +34,7 @@ const Header = ({ logo, title }) => {
       <TouchableOpacity onPress={handleSettings} style={styles.rightContainer}>
         <AntDesign name="setting" size={30} color="#fff" />
       </TouchableOpacity>
+      {isMenuVisible && <SettingsMenu onCloseSession={handleLogout} />}
     </View>
   );
 };
@@ -35,7 +44,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#181C42',
     borderBottomWidth: 1,
     borderBottomColor: '#707070',
-    flexDirection: 'row', // Keep it as 'row'
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 40,
