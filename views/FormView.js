@@ -667,6 +667,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     width: '100%',
+    
   },
 
   formContainer: {
@@ -674,6 +675,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+  
   },
 
   formSection: {

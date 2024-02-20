@@ -1,22 +1,18 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import SettingsMenu from './SettingsMenu';
 
 const Header = ({ logo, title }) => {
-  const navigation = useNavigation();
-
-  const handleBackButton = () => {
-    navigation.goBack();
-  };
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSettings = () => {
-    console.log('Configuracion clickeado');
+    setIsMenuOpen(!isMenuOpen);
   };
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleBackButton} style={styles.leftContainer}>
+      <TouchableOpacity onPress={() => console.log('Back button pressed')} style={styles.leftContainer}>
         <AntDesign name="arrowleft" size={30} color="#fff" />
       </TouchableOpacity>
       <View style={styles.centerContainer}>
@@ -24,8 +20,9 @@ const Header = ({ logo, title }) => {
         <Text style={styles.title}>{title}</Text>
       </View>
       <TouchableOpacity onPress={handleSettings} style={styles.rightContainer}>
-        <AntDesign name="setting" size={30} color="#fff" />
+        <AntDesign name={isMenuOpen ? 'close' : 'setting'} size={30} color="#fff" />
       </TouchableOpacity>
+      {isMenuOpen && <SettingsMenu onCloseSession={() => setIsMenuOpen(false)} />}
     </View>
   );
 };
@@ -35,12 +32,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#181C42',
     borderBottomWidth: 1,
     borderBottomColor: '#707070',
-    flexDirection: 'row', // Keep it as 'row'
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 40,
     paddingHorizontal: 10,
     width: '100%',
+    zIndex: 10,
   },
   leftContainer: {
     padding: 10,
