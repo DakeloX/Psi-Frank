@@ -3,7 +3,7 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { ref, set, onValue } from 'firebase/database';
 import { database } from '../firebase';
 
-const FirebaseDemo = () => {
+const UpForm = () => {
     const escribirDatos = async () => {
         try {
             await set(ref(database, 'ejemplo'), {
@@ -54,4 +54,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default FirebaseDemo;
+export default UpForm;

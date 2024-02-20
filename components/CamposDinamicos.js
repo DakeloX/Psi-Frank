@@ -65,7 +65,7 @@ const CamposDinamicos = () => {
         height: 40,
         borderRadius: 8,
         marginTop: 8,
-        backgroundColor: 'red',
+        backgroundColor: '#A02B2B',
         marginLeft: 6,
         alignItems: 'center',
         justifyContent: 'center',
