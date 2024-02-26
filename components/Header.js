@@ -1,20 +1,29 @@
+// Header.js
 import React, { useState } from 'react';
-import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import SettingsMenu from './SettingsMenu';
+import SettingsMenu from '../components/SettingsMenu';
 
-const Header = ({ logo, title }) => {
+const Header = ({ navigation, logo, title }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSettings = () => {
     setIsMenuOpen(!isMenuOpen);
   };
 
+  const handleGoBack = () => {
+    navigation.goBack();
+  };
+
+  const showBackButton = navigation.canGoBack();
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => console.log('Back button pressed')} style={styles.leftContainer}>
-        <AntDesign name="arrowleft" size={30} color="#fff" />
-      </TouchableOpacity>
+      {showBackButton && (
+        <TouchableOpacity onPress={handleGoBack} style={styles.leftContainer}>
+          <AntDesign name="arrowleft" size={30} color="#fff" />
+        </TouchableOpacity>
+      )}
       <View style={styles.centerContainer}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>{title}</Text>

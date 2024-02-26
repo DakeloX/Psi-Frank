@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
 import CamposDinamicos from '../components/CamposDinamicos';
@@ -8,11 +9,14 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Tabla from '../components/Tabla';
 
+  
+
 const FormView = () => {
   const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [civilState, setCivilState] = useState(null);
+  const navigation = useNavigation();
 
   const escolaridadRef = useRef();
   const religionRef = useRef();
@@ -123,7 +127,7 @@ const FormView = () => {
 
   return (
     <View style={styles.container}>
-      <Header logo={require('../images/Logo_Lobo.png')} title="Pacientes" />
+      <Header navigation={navigation} logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
       <ScrollView contentContainerStyle={styles.formContainer}>
         {/* Información Personal */}
         <View style={styles.formSection}>

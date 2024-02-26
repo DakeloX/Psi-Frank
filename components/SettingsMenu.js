@@ -1,28 +1,16 @@
-import React, { forwardRef } from 'react';
+// SettingsMenu.js
+import React from 'react';
 import { View, TouchableOpacity, Text, StyleSheet } from 'react-native';
-import { useAuth } from '../App'; // Ajusta la ruta según la ubicación real de App.js
+import { useNavigation } from '@react-navigation/native'; // Importa la función useNavigation
 
-const SettingsMenu = forwardRef(({ onCloseSession }, ref) => {
-  const { logout } = useAuth();
+const SettingsMenu = ({ onCloseSession }) => {
+  const navigation = useNavigation(); // Inicializa la navegación
 
   const handleLogout = () => {
-    onCloseSession();
-    logout();
+    // Aquí puedes realizar cualquier lógica necesaria antes de cerrar sesión, como limpiar el almacenamiento local, etc.
+    onCloseSession(); // Llama a la función onCloseSession proporcionada por el componente padre si es necesario
+    navigation.navigate('Login'); // Navega a la vista Login después de cerrar sesión
   };
-
-  const closeMenu = () => {
-    // Lógica para cerrar el menú
-  };
-
-  const toggleMenu = () => {
-    // Lógica para alternar la visibilidad del menú
-  };
-
-  // Asigna los métodos al ref
-  React.useImperativeHandle(ref, () => ({
-    closeMenu,
-    toggleMenu,
-  }));
 
   return (
     <View style={styles.menuContainer}>
@@ -31,7 +19,7 @@ const SettingsMenu = forwardRef(({ onCloseSession }, ref) => {
       </TouchableOpacity>
     </View>
   );
-});
+};
 
 const styles = StyleSheet.create({
   menuContainer: {
