@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { View, TouchableOpacity, Text, StyleSheet, Image } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import SettingsMenu from './SettingsMenu';
+import { useNavigation } from '@react-navigation/native';
 
 const Header = ({ logo, title }) => {
+  const navigation =useNavigation();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   const handleSettings = () => {
@@ -12,7 +14,7 @@ const Header = ({ logo, title }) => {
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={() => console.log('Back button pressed')} style={styles.leftContainer}>
+      <TouchableOpacity onPress={() => navigation.goBack()} style={styles.leftContainer}>
         <AntDesign name="arrowleft" size={30} color="#fff" />
       </TouchableOpacity>
       <View style={styles.centerContainer}>

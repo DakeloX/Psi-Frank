@@ -35,9 +35,7 @@ const HomeView = () => {
     <View style={styles.container}>
       <Header logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
       <ScrollView contentContainerStyle={styles.formContainer}>
-        <View style ={styles.barStyle}>
         <SearchBar onTermSubmit={handleSearch} />
-        </View>
         {searchedPatient && (
           <View style={styles.container}>
             <Text style={styles.title}>Resultados de la búsqueda</Text>
@@ -80,7 +78,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-start',
     width: '100%',
-
   },
 
   formContainer: {
@@ -105,10 +102,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     fontSize: 16,
   },
-  barStyle:{
-    zIndex:1,
-    width: 350,
-  }
 });
 
 export default HomeView;

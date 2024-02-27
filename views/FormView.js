@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
 import { CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import guardarDatos from '../components/guardarDatos';
 import CamposDinamicos from '../components/CamposDinamicos';
 import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
@@ -13,7 +14,11 @@ const FormView = () => {
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [civilState, setCivilState] = useState(null);
+  const [nombre, setNombre] = useState('');
 
+  const nombreRef = useRef();
+  const idnRef = useRef();
+  const ocupacionRef = useRef();
   const escolaridadRef = useRef();
   const religionRef = useRef();
   const viveconRef = useRef();
@@ -121,6 +126,27 @@ const FormView = () => {
     setTableContainerHeight(height);
   };
 
+  // Función para guardar datos en Firebase
+  const handleGuardarDatos = () => {
+    // Verificar si el valor del nombre es válido antes de continuar
+    if (!nombre) {
+      console.error("Error: El nombre no puede estar vacío.");
+      return;
+    }
+
+    // Crear el objeto con los datos del formulario
+    const datosFormulario = {
+      nombre: nombre,
+      // Puedes agregar más campos según sea necesario
+    };
+
+    // Log para verificar los datos antes de guardarlos
+    console.log("Datos a guardar:", datosFormulario);
+
+    // Llamar a la función para guardar datos en Firebase
+    guardarDatos(datosFormulario);
+  };
+
   return (
     <View style={styles.container}>
       <Header logo={require('../images/Logo_Lobo.png')} title="Pacientes" />
@@ -130,7 +156,12 @@ const FormView = () => {
           <Text style={styles.sectionTitle}>Información Personal</Text>
 
           <Text style={styles.label}>Nombre:</Text>
-          <TextInput style={styles.input} placeholder="Ingrese el nombre" />
+          <TextInput 
+            style={styles.input} 
+            ref={nombreRef} 
+            placeholder="Ingrese el nombre"
+            onChangeText={(text) => setNombre(text)}
+          />
 
           <Text style={styles.label}>Documento de identidad:</Text>
           <View style={styles.idnContainer}>
@@ -145,11 +176,11 @@ const FormView = () => {
                   { label: 'Otro', value: 'Otro' },
                 ]}
                 style={pickerSelectStyles}
-                useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+                useNativeAndroidPickerStyle={false}
               />
             </View>
             <View style={styles.emptyView}></View>
-            <TextInput style={styles.inputIdn} placeholder="Ingresa documento" keyboardType="numeric" />
+            <TextInput style={styles.inputIdn} ref={idnRef} placeholder="Ingresa documento" keyboardType="numeric" />
           </View>
 
           <Text style={styles.label}>Fecha de nacimiento:</Text>
@@ -650,7 +681,7 @@ const FormView = () => {
           />
         </View>
         {/* Botón de Guardar */}
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={handleGuardarDatos}>
           <Text style={styles.submitButtonText}>Guardar</Text>
         </TouchableOpacity>
       </ScrollView>
@@ -667,7 +698,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     width: '100%',
-    
+
   },
 
   formContainer: {
@@ -675,7 +706,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-  
+
   },
 
   formSection: {
@@ -866,7 +897,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 64,
-    marginTop: 10,
+    marginTop: 0,
   },
 
   submitButtonText: {

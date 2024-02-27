@@ -36,7 +36,7 @@ const CamposDinamicos = () => {
             </View>
         ))}
         <TouchableOpacity onPress={agregarCampo} style={styles.botonAgregar}>
-            <Text style={{ color: 'white', fontSize: 32 }}>+</Text>
+            <Text style={{ color: 'white', fontSize: 30 }}>+</Text>
         </TouchableOpacity>
         </View>
     );
@@ -71,11 +71,12 @@ const CamposDinamicos = () => {
         justifyContent: 'center',
     },
     botonAgregar: {
-        padding: 2,
+        paddingBottom: 6,
         borderRadius: 8,
         backgroundColor: '#3498DB',
         alignItems: 'center',
         justifyContent: 'center',
+        height: 50,
         width: 80,
         marginBottom: 8,
         marginTop: 8,
