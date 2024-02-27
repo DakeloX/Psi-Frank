@@ -17,11 +17,8 @@ const FormView = () => {
   const [gender, setGender] = useState(null);
   const [identidad, setIdentidad] = useState(null);
   const [civilState, setCivilState] = useState(null);
-<<<<<<< HEAD
   const [nombre, setNombre] = useState('');
-=======
   const navigation = useNavigation();
->>>>>>> 2dcaa1ae2a1bcd73b3945cc72d76fda041b47bfe
 
   const nombreRef = useRef();
   const idnRef = useRef();
