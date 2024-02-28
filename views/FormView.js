@@ -321,7 +321,6 @@ const FormView = () => {
             returnKeyType='next'
             blurOnSubmit={false}
           />
-          {/* Otros campos de información de contacto */}
         </View>
         {/* Antecedentes */}
         <View style={styles.formSection}>
