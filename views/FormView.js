@@ -10,18 +10,19 @@ import Header from '../components/Header';
 import Footer from '../components/Footer';
 import Tabla from '../components/Tabla';
 
-  
-
 const FormView = () => {
+  const navigation = useNavigation();
+  
+  const [nombre, setNombre] = useState('');
+  const [idTipo, setIdTipo] = useState(null);
+  const [idNumber, setIdNumber] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
-  const [identidad, setIdentidad] = useState(null);
   const [civilState, setCivilState] = useState(null);
-  const [nombre, setNombre] = useState('');
-  const navigation = useNavigation();
+  const [parentescoAcompañante, setParentescoAcompañante] = useState('');
 
   const nombreRef = useRef();
-  const idnRef = useRef();
+  const idNumberRef = useRef();
   const ocupacionRef = useRef();
   const escolaridadRef = useRef();
   const religionRef = useRef();
@@ -41,7 +42,6 @@ const FormView = () => {
   const analisisRef = useRef();
 
   const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
-  const [parentescoAcompañante, setParentescoAcompañante] = useState('');
 
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
@@ -138,10 +138,24 @@ const FormView = () => {
       return;
     }
 
+    // Verificar si se ha seleccionado un tipo de documento
+    if (!idTipo) {
+      console.error("Error: Debes seleccionar un tipo de documento.");
+      return;
+    }
+
+    // Verificar si se ha ingresado un número de documento
+    if (!idNumber) {
+      console.error("Error: Debes ingresar un número de documento.");
+      return;
+    }
+
     // Crear el objeto con los datos del formulario
     const datosFormulario = {
       nombre: nombre,
-      // Puedes agregar más campos según sea necesario
+      tipoIdentidad: idTipo,
+      identidad: idNumber,
+      // Add more properties for other input fields in the form
     };
 
     // Log para verificar los datos antes de guardarlos
@@ -160,9 +174,9 @@ const FormView = () => {
           <Text style={styles.sectionTitle}>Información Personal</Text>
 
           <Text style={styles.label}>Nombre:</Text>
-          <TextInput 
-            style={styles.input} 
-            ref={nombreRef} 
+          <TextInput
+            style={styles.input}
+            ref={nombreRef}
             placeholder="Ingrese el nombre"
             onChangeText={(text) => setNombre(text)}
           />
@@ -172,7 +186,7 @@ const FormView = () => {
             <View style={styles.pickerContainerIdn}>
               <RNPickerSelect
                 placeholder={{ label: '>', value: null }}
-                onValueChange={(value) => setIdentidad(value)}
+                onValueChange={(value) => setIdTipo(value)} //Aqui se guarda el tipo de documento
                 items={[
                   { label: 'C.C', value: 'CC' },
                   { label: 'T.I', value: 'TI' },
@@ -184,7 +198,13 @@ const FormView = () => {
               />
             </View>
             <View style={styles.emptyView}></View>
-            <TextInput style={styles.inputIdn} ref={idnRef} placeholder="Ingresa documento" keyboardType="numeric" />
+            <TextInput
+              style={styles.inputIdn}
+              ref={idNumberRef}
+              placeholder="Ingresa documento"
+              keyboardType="numeric" 
+              onChangeText={(text) => setIdNumber(text)} //Aqui se guarda el numero de documento
+              />
           </View>
 
           <Text style={styles.label}>Fecha de nacimiento:</Text>

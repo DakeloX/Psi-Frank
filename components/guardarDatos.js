@@ -3,14 +3,11 @@ import { database } from '../firebase';
 
 const guardarDatos = async (datosFormulario) => {
     try {
-        // Generar una nueva clave única para cada registro
+        // Agregar un nuevo elemento con una clave única
         const nuevaClave = push(ref(database, 'pacientes')).key;
 
-        // Actualizar el camino utilizando la nueva clave
-        const caminoRegistro = `pacientes/${nuevaClave}`;
-
         // Guardar datos en la base de datos de Firebase
-        await set(ref(database, caminoRegistro), datosFormulario);
+        await set(ref(database, `pacientes/${nuevaClave}`), datosFormulario);
 
         console.log('Datos guardados en Firebase:', datosFormulario);
     } catch (error) {
