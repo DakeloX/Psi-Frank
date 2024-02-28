@@ -1,7 +1,9 @@
 import React, { useState, useRef } from 'react';
 import { View, Text, TextInput, TouchableOpacity, ScrollView, StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { CheckBox } from 'react-native-elements';
 import RNPickerSelect from 'react-native-picker-select';
+import guardarDatos from '../components/guardarDatos';
 import CamposDinamicos from '../components/CamposDinamicos';
 import SelectFecha from '../components/SelectFecha';
 import Header from '../components/Header';
@@ -9,11 +11,19 @@ import Footer from '../components/Footer';
 import Tabla from '../components/Tabla';
 
 const FormView = () => {
+  const navigation = useNavigation();
+  
+  const [nombre, setNombre] = useState('');
+  const [idTipo, setIdTipo] = useState(null);
+  const [idNumber, setIdNumber] = useState('');
   const [fechaNacimiento, setFechaNacimiento] = useState(null);
   const [gender, setGender] = useState(null);
-  const [identidad, setIdentidad] = useState(null);
   const [civilState, setCivilState] = useState(null);
+  const [parentescoAcompañante, setParentescoAcompañante] = useState('');
 
+  const nombreRef = useRef();
+  const idNumberRef = useRef();
+  const ocupacionRef = useRef();
   const escolaridadRef = useRef();
   const religionRef = useRef();
   const viveconRef = useRef();
@@ -32,7 +42,6 @@ const FormView = () => {
   const analisisRef = useRef();
 
   const [isCheckedAcompañante, setCheckedAcompañante] = useState(false);
-  const [parentescoAcompañante, setParentescoAcompañante] = useState('');
 
   const [isChecked1, setChecked1] = useState(false);
   const [isChecked2, setChecked2] = useState(false);
@@ -78,7 +87,7 @@ const FormView = () => {
     setChecked1(true);
     setChecked2(false);
   };
-  
+
   const handleCheck2 = () => {
     setChecked2(true);
     setChecked1(false);
@@ -121,23 +130,63 @@ const FormView = () => {
     setTableContainerHeight(height);
   };
 
+  // Función para guardar datos en Firebase
+  const handleGuardarDatos = () => {
+    // Verificar si el valor del nombre es válido antes de continuar
+    if (!nombre) {
+      console.error("Error: El nombre no puede estar vacío.");
+      return;
+    }
+
+    // Verificar si se ha seleccionado un tipo de documento
+    if (!idTipo) {
+      console.error("Error: Debes seleccionar un tipo de documento.");
+      return;
+    }
+
+    // Verificar si se ha ingresado un número de documento
+    if (!idNumber) {
+      console.error("Error: Debes ingresar un número de documento.");
+      return;
+    }
+
+    // Crear el objeto con los datos del formulario
+    const datosFormulario = {
+      nombre: nombre,
+      tipoIdentidad: idTipo,
+      identidad: idNumber,
+      // Add more properties for other input fields in the form
+    };
+
+    // Log para verificar los datos antes de guardarlos
+    console.log("Datos a guardar:", datosFormulario);
+
+    // Llamar a la función para guardar datos en Firebase
+    guardarDatos(datosFormulario);
+  };
+
   return (
     <View style={styles.container}>
-      <Header logo={require('../images/Logo_Lobo.png')} title="Pacientes" />
+      <Header navigation={navigation} logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
       <ScrollView contentContainerStyle={styles.formContainer}>
         {/* Información Personal */}
         <View style={styles.formSection}>
           <Text style={styles.sectionTitle}>Información Personal</Text>
 
           <Text style={styles.label}>Nombre:</Text>
-          <TextInput style={styles.input} placeholder="Ingrese el nombre" />
+          <TextInput
+            style={styles.input}
+            ref={nombreRef}
+            placeholder="Ingrese el nombre"
+            onChangeText={(text) => setNombre(text)}
+          />
 
           <Text style={styles.label}>Documento de identidad:</Text>
           <View style={styles.idnContainer}>
             <View style={styles.pickerContainerIdn}>
               <RNPickerSelect
                 placeholder={{ label: '>', value: null }}
-                onValueChange={(value) => setIdentidad(value)}
+                onValueChange={(value) => setIdTipo(value)} //Aqui se guarda el tipo de documento
                 items={[
                   { label: 'C.C', value: 'CC' },
                   { label: 'T.I', value: 'TI' },
@@ -145,11 +194,17 @@ const FormView = () => {
                   { label: 'Otro', value: 'Otro' },
                 ]}
                 style={pickerSelectStyles}
-                useNativeAndroidPickerStyle={false} // Esto desactiva el estilo predeterminado en Android
+                useNativeAndroidPickerStyle={false}
               />
             </View>
             <View style={styles.emptyView}></View>
-            <TextInput style={styles.inputIdn} placeholder="Ingresa documento" keyboardType="numeric" />
+            <TextInput
+              style={styles.inputIdn}
+              ref={idNumberRef}
+              placeholder="Ingresa documento"
+              keyboardType="numeric" 
+              onChangeText={(text) => setIdNumber(text)} //Aqui se guarda el numero de documento
+              />
           </View>
 
           <Text style={styles.label}>Fecha de nacimiento:</Text>
@@ -195,39 +250,39 @@ const FormView = () => {
           </View>
 
           <Text style={styles.label}>Ocupación:</Text>
-          <TextInput 
-            style={styles.input} 
-            placeholder="Ingresa la ocupación" 
+          <TextInput
+            style={styles.input}
+            placeholder="Ingresa la ocupación"
             onSubmitEditing={handleCampoSubmit(escolaridadRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
 
           <Text style={styles.label}>Escolaridad:</Text>
-          <TextInput 
-            style={styles.input} 
+          <TextInput
+            style={styles.input}
             ref={escolaridadRef}
-            placeholder="Ingresa la escolaridad" 
+            placeholder="Ingresa la escolaridad"
             onSubmitEditing={handleCampoSubmit(religionRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
 
           <Text style={styles.label}>Religión:</Text>
-          <TextInput 
+          <TextInput
             style={styles.input}
-            ref={religionRef} 
-            placeholder="Ingresa la religión" 
+            ref={religionRef}
+            placeholder="Ingresa la religión"
             onSubmitEditing={handleCampoSubmit(viveconRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
 
           <Text style={styles.label}>Con quién vive:</Text>
-          <TextInput 
-            style={styles.input} 
+          <TextInput
+            style={styles.input}
             ref={viveconRef}
-            placeholder="Con quien vive el paciente" 
+            placeholder="Con quien vive el paciente"
           />
 
           <Text style={styles.label}>Acompañante:</Text>
@@ -257,16 +312,15 @@ const FormView = () => {
         <View style={styles.formSection}>
           <Text style={styles.sectionTitleMiddle}>Información de Contacto</Text>
           <Text style={styles.label}>Teléfono:</Text>
-          <TextInput 
+          <TextInput
             style={styles.input}
-            ref={telefonoRef} 
-            placeholder="Ingresa el teléfono" 
+            ref={telefonoRef}
+            placeholder="Ingresa el teléfono"
             keyboardType="phone-pad"
             onSubmitEditing={handleCampoSubmit(patologicosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-          {/* Otros campos de información de contacto */}
         </View>
         {/* Antecedentes */}
         <View style={styles.formSection}>
@@ -286,15 +340,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={patologicosRef}
-            placeholder=">"
+            placeholder="Ingrese Patológias"
             editable={!isCheckedPatologia}
             onSubmitEditing={handleCampoSubmit(farmacologicosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Farmacológicos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -310,15 +364,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={farmacologicosRef}
-            placeholder=">"
+            placeholder="Ingrese Farmacos"
             editable={!isCheckedFarmaco}
             onSubmitEditing={handleCampoSubmit(toxicosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Tóxicos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -334,15 +388,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={toxicosRef}
-            placeholder=">"
+            placeholder="Ingrese Tóxicos"
             editable={!isCheckedToxicos}
             onSubmitEditing={handleCampoSubmit(quirurgicosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Quirúrgicos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -358,15 +412,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={quirurgicosRef}
-            placeholder=">"
+            placeholder="Ingrese Cirugías"
             editable={!isCheckedQuirur}
             onSubmitEditing={handleCampoSubmit(alergiasRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Alergias:</Text>
             <View style={styles.checkBoxSpace}>
@@ -382,15 +436,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={alergiasRef}
-            placeholder=">"
+            placeholder="Ingrese Alergias"
             editable={!isCheckedAlergias}
             onSubmitEditing={handleCampoSubmit(ginecologicosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Ginecológicos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -416,15 +470,15 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={ginecologicosRef}
-            placeholder=">"
+            placeholder="Ingrese antecedences ginecológicos"
             editable={!isCheckedGinec && !isCheckedGinecAp} // No editable si alguno de los dos está seleccionado
             onSubmitEditing={handleCampoSubmit(psiquiatricosRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
             <Text style={styles.labelAntecedentes}>Psiquiatricos:</Text>
             <View style={styles.checkBoxSpace}>
@@ -440,18 +494,18 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.input}
             ref={psiquiatricosRef}
-            placeholder=">"
+            placeholder="Ingrese antecedentes psiquiatricos"
             editable={!isCheckedPsiq}
             onSubmitEditing={handleCampoSubmit(antfamiliaRef)}
             returnKeyType='next'
             blurOnSubmit={false}
           />
-
           <View style={styles.checkBoxAntecedetes}>
-            <Text style={[styles.labelAntecedentes, {marginBottom: 6}]}>Antecedentes {'\n'}Familiares:</Text>
-            <View style={[styles.checkBoxSpace, {marginTop: 6}]}>
+            <Text style={[styles.labelAntecedentes, { marginBottom: 6 }]}>Antecedentes {'\n'}Familiares:</Text>
+            <View style={[styles.checkBoxSpace, { marginTop: 6 }]}>
               <CheckBox
                 title='Niega'
                 checked={isCheckedPsiqFamilia}
@@ -464,9 +518,10 @@ const FormView = () => {
               />
             </View>
           </View>
+
           <TextInput style={styles.doubleInput}
             ref={antfamiliaRef}
-            placeholder=">"
+            placeholder="Ingrese antecedentes Familiares"
             editable={!isCheckedPsiqFamilia}
             multiline={true}
             onSubmitEditing={() => {
@@ -478,11 +533,11 @@ const FormView = () => {
             blurOnSubmit={true}
           />
 
-          <Text style={styles.label}>Examenes Laboratorios:</Text>
-          <TextInput 
+          <Text style={styles.label}>Exámenes Laboratorios:</Text>
+          <TextInput
             style={styles.doubleInput}
-            ref={laboratoriosRef} 
-            placeholder=">" 
+            ref={laboratoriosRef}
+            placeholder="Ingrese exámenes de laboratorio"
             multiline={true}
             onSubmitEditing={() => {
               laboratoriosRef.current.blur();
@@ -494,10 +549,10 @@ const FormView = () => {
           />
 
           <Text style={styles.label}>Motivo Consulta:</Text>
-          <TextInput 
+          <TextInput
             style={styles.doubleInput}
-            ref={consultaRef} 
-            placeholder=">" 
+            ref={consultaRef}
+            placeholder="Ingresar motivo de consulta"
             multiline={true}
             onSubmitEditing={() => {
               consultaRef.current.blur();
@@ -509,10 +564,10 @@ const FormView = () => {
           />
 
           <Text style={styles.label}>Enfermedad Actual:</Text>
-          <TextInput 
+          <TextInput
             style={styles.tripleInput}
-            ref={enfactualRef} 
-            placeholder=">" 
+            ref={enfactualRef}
+            placeholder="Ingrese enfermedad actual"
             multiline={true}
             onSubmitEditing={() => {
               enfactualRef.current.blur();
@@ -522,7 +577,7 @@ const FormView = () => {
           />
         </View>
 
-        <View style={[styles.formSection, {marginBottom: 0}, {width: 360}]}>
+        <View style={[styles.formSection, { marginBottom: 0 }, { width: 360 }]}>
 
           <Text style={[styles.labelTop, { marginTop: -8 }]}>Orientación:</Text>
 
@@ -541,7 +596,7 @@ const FormView = () => {
               />
             </View>
           </View>
-          
+
           <View style={styles.numberList}>
             <Text style={styles.label2}>Alopsíquica: </Text>
             <View style={styles.checkBox}>
@@ -559,7 +614,7 @@ const FormView = () => {
           </View>
 
           <Text style={styles.labelTop}>Conciencia:</Text>
-          <View  style={styles.numberList}>
+          <View style={styles.numberList}>
             <Text style={styles.label2}>De Situación: </Text>
             <View style={styles.checkBox}>
               <CheckBox
@@ -575,8 +630,8 @@ const FormView = () => {
             </View>
           </View>
 
-          <View  style={styles.numberList}>
-          <Text style={styles.label2}>De Enfermedad: </Text>
+          <View style={styles.numberList}>
+            <Text style={styles.label2}>De Enfermedad: </Text>
             <View style={styles.checkBox}>
               <CheckBox
                 title='Si'
@@ -590,16 +645,16 @@ const FormView = () => {
               />
             </View>
           </View>
-          
-          <Text style={[styles.highLabel, {marginTop: 12}]}>Examen Mental:</Text>
-          <Text style ={styles.examenLabel}>Prosopografía, Atención, 
-            Sensopercepción, Ideación, Pensamiento, Curso, Afectividad, 
+
+          <Text style={[styles.highLabel, { marginTop: 12 }]}>Examen Mental:</Text>
+          <Text style={styles.examenLabel}>Prosopografía, Atención,
+            Sensopercepción, Ideación, Pensamiento, Curso, Afectividad,
             Razonamiento, Memoria, Lenguaje, Ánimo, Sueño, Orexia,
             Juicio, Conducta, Introspección, Prospección</Text>
-          <TextInput 
+          <TextInput
             style={styles.doubleInputEA}
-            placeholder=">" 
-            multiline={true} 
+            placeholder="Ingrese el examen mental"
+            multiline={true}
             onSubmitEditing={() => {
               current.blur();
               analisisRef.current.focus();
@@ -609,11 +664,11 @@ const FormView = () => {
           />
 
           <Text style={styles.highLabel}>Análisis:</Text>
-          <TextInput 
-            style={styles.tripleInput} 
+          <TextInput
+            style={styles.tripleInput}
             ref={analisisRef}
-            placeholder=">" 
-            multiline={true} 
+            placeholder="Ingrese análisis"
+            multiline={true}
             onSubmitEditing={() => {
               current.blur();
               analisisRef.current.focus();
@@ -621,37 +676,37 @@ const FormView = () => {
             returnKeyType='next'
             blurOnSubmit={true}
           />
-          
+
           <Text style={styles.highLabelB}>Impresión Diagnostica:</Text>
-            <View style={{width: 360}}>
-              <CamposDinamicos/>
-            </View>
+          <View style={{ width: 360 }}>
+            <CamposDinamicos />
+          </View>
 
           <Text style={styles.label}>Plan de Manejo:</Text>
-            <TextInput 
-              style={styles.tripleInput}
-              placeholder=">" 
-              multiline={true}
-            />
+          <TextInput
+            style={styles.tripleInput}
+            placeholder="Ingrese plan de manejo"
+            multiline={true}
+          />
         </View>
-        
-        <View style = {styles.tableContainer}>
-            <Text style={[styles.highLabel, {marginBottom: 8}]}>Tratamiento:</Text>
-            <Tabla onTableHeightChange={handleTableHeightChange}/>
+
+        <View style={styles.tableContainer}>
+          <Text style={[styles.highLabel, { marginBottom: 8 }]}>Tratamiento:</Text>
+          <Tabla onTableHeightChange={handleTableHeightChange} />
         </View>
 
         <View style={styles.formSection}>
           <Text style={styles.label}>Recomendaciones:</Text>
-            <TextInput 
-              style={styles.tripleInput}
-              placeholder=">" 
-              multiline={true}
-            />
+          <TextInput
+            style={styles.tripleInput}
+            placeholder="Ingrese recomendaciones"
+            multiline={true}
+          />
         </View>
         {/* Botón de Guardar */}
-        <TouchableOpacity style={styles.submitButton}>
+        <TouchableOpacity style={styles.submitButton} onPress={handleGuardarDatos}>
           <Text style={styles.submitButtonText}>Guardar</Text>
-        </TouchableOpacity>        
+        </TouchableOpacity>
       </ScrollView>
       <Footer />
     </View>
@@ -666,6 +721,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     justifyContent: 'center',
     width: '100%',
+
   },
 
   formContainer: {
@@ -673,6 +729,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
+
   },
 
   formSection: {
@@ -719,11 +776,11 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
   },
 
-  examenLabel:{
+  examenLabel: {
     color: '#fff',
     fontSize: 14,
     marginTop: 8,
-    marginBottom: 4, 
+    marginBottom: 4,
     width: 360,
     borderColor: '#fff',
     borderWidth: 0.5,
@@ -771,13 +828,13 @@ const styles = StyleSheet.create({
   prefix: {
     color: '#fff',
     fontSize: 20,
-    marginTop:  10,
+    marginTop: 10,
     marginRight: 5, // Puedes ajustar el espaciado según tus necesidades
   },
 
   numberList: {
-    flexDirection:'row', 
-    justifyContent:'space-between'
+    flexDirection: 'row',
+    justifyContent: 'space-between'
   },
 
   doubleInput: {
@@ -863,7 +920,7 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     alignItems: 'center',
     marginBottom: 64,
-    marginTop: 10,
+    marginTop: 0,
   },
 
   submitButtonText: {

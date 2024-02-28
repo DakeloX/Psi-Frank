@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity, ScrollView } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import FirebaseDemo from '../components/FirebaseDemo';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import NewPatient from '../components/BtnNewPatient';
@@ -34,7 +33,7 @@ const HomeView = () => {
 
   return (
     <View style={styles.container}>
-      <Header logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
+    <Header navigation={navigation} logo={require('../images/Logo_Lobo.png')} title="Psi-Frank" />
       <ScrollView contentContainerStyle={styles.formContainer}>
         <SearchBar onTermSubmit={handleSearch} />
         {searchedPatient && (
@@ -65,7 +64,6 @@ const HomeView = () => {
         <TouchableOpacity onPress={handleViewAllPress}>
           <Text style={styles.viewAllText}>Ver Todos</Text>
         </TouchableOpacity>
-        <FirebaseDemo />
       </ScrollView>
       <Footer />
     </View>
@@ -77,8 +75,7 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#181C42',
     alignSelf: 'center',
-    alignItems: 'center',
-    justifyContent: 'flex-start',
+    justifyContent: 'center',
     width: '100%',
   },
 

@@ -1,31 +1,37 @@
-import React from 'react';
-import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native';
+// Header.js
+import React, { useState } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
-import { useNavigation } from '@react-navigation/native';
+import SettingsMenu from '../components/SettingsMenu';
 
-const Header = ({ logo, title }) => {
-  const navigation = useNavigation();
+const Header = ({ navigation, logo, title }) => {
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
-  const handleBackButton = () => {
+  const handleSettings = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
+  const handleGoBack = () => {
     navigation.goBack();
   };
 
-  const handleSettings = () => {
-    console.log('Configuracion clickeado');
-  };
+  const showBackButton = navigation.canGoBack();
 
   return (
     <View style={styles.container}>
-      <TouchableOpacity onPress={handleBackButton} style={styles.leftContainer}>
-        <AntDesign name="arrowleft" size={30} color="#fff" />
-      </TouchableOpacity>
+      {showBackButton && (
+        <TouchableOpacity onPress={handleGoBack} style={styles.leftContainer}>
+          <AntDesign name="arrowleft" size={30} color="#fff" />
+        </TouchableOpacity>
+      )}
       <View style={styles.centerContainer}>
         <Image source={logo} style={styles.logo} />
         <Text style={styles.title}>{title}</Text>
       </View>
       <TouchableOpacity onPress={handleSettings} style={styles.rightContainer}>
-        <AntDesign name="setting" size={30} color="#fff" />
+        <AntDesign name={isMenuOpen ? 'close' : 'setting'} size={30} color="#fff" />
       </TouchableOpacity>
+      {isMenuOpen && <SettingsMenu onCloseSession={() => setIsMenuOpen(false)} />}
     </View>
   );
 };
@@ -35,12 +41,13 @@ const styles = StyleSheet.create({
     backgroundColor: '#181C42',
     borderBottomWidth: 1,
     borderBottomColor: '#707070',
-    flexDirection: 'row', // Keep it as 'row'
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginTop: 40,
     paddingHorizontal: 10,
     width: '100%',
+    zIndex: 10,
   },
   leftContainer: {
     padding: 10,

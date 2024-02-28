@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import HomeView from './views/HomeView'; // Importa tu vista principal
+import LoginView from './views/LoginView';
+import HomeView from './views/HomeView';
 import FormView from './views/FormView';
-import LoginView from './views/LoginView'; // Importa la vista de inicio de sesión
 
 const Stack = createStackNavigator();
 
@@ -13,21 +13,16 @@ const App = () => {
   return (
     <NavigationContainer>
       <Stack.Navigator
+        initialRouteName={isAuthenticated ? "Home" : "Login"} // Si está autenticado, navega a Home, de lo contrario, a Login
         screenOptions={{
-          headerShown: false,
+          headerShown: false // Oculta la barra de navegación predeterminada
         }}
       >
-        {!isAuthenticated ? (
-          <Stack.Screen name="Login">
-            {() => <LoginView setIsAuthenticated={setIsAuthenticated} />}
-          </Stack.Screen>
-        ) : (
-          <>
-            <Stack.Screen name="Home" component={HomeView} />
-            <Stack.Screen name="Form" component={FormView} />
-            {/* Agrega más pantallas según sea necesario */}
-          </>
-        )}
+        <Stack.Screen name="Login">
+          {(props) => <LoginView {...props} setIsAuthenticated={setIsAuthenticated} />}
+        </Stack.Screen>
+        <Stack.Screen name="Home" component={HomeView} />
+        <Stack.Screen name="Form" component={FormView} />
       </Stack.Navigator>
     </NavigationContainer>
   );
